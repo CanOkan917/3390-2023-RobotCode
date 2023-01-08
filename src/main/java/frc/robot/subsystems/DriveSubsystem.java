@@ -67,13 +67,11 @@ public class DriveSubsystem extends SubsystemBase {
    * @param rot Y ekseninde hız (%)
    */
   public void arcadeDrive(double fwd, double rot) {
-    double fwd_new = fwd;
-    double rot_new = rot;
     if (LowPowerMode.INSTANCE.getLowDriveModeEnabled()) {
-      fwd_new = LowPowerMode.INSTANCE.calculate(fwd, LOWPOWERMODE_INCREASE_TYPE.TREE);
-      rot_new = LowPowerMode.INSTANCE.calculate(rot, LOWPOWERMODE_INCREASE_TYPE.TREE);
+      fwd = LowPowerMode.INSTANCE.calculate(fwd, LOWPOWERMODE_INCREASE_TYPE.TREE);
+      rot = LowPowerMode.INSTANCE.calculate(rot, LOWPOWERMODE_INCREASE_TYPE.TREE);
     }
-    drive.arcadeDrive(fwd_new, rot_new);
+    drive.arcadeDrive(fwd, rot);
   }
 
   /**
@@ -82,6 +80,10 @@ public class DriveSubsystem extends SubsystemBase {
    * @param rightPercent Sağ tekereklere gidecek hız (%)
    */
   public void tankDrivePercent(double leftPercent, double rightPercent) {
+    if (LowPowerMode.INSTANCE.getLowDriveModeEnabled()) {
+      leftPercent = LowPowerMode.INSTANCE.calculate(leftPercent, LOWPOWERMODE_INCREASE_TYPE.TREE);
+      rightPercent = LowPowerMode.INSTANCE.calculate(rightPercent, LOWPOWERMODE_INCREASE_TYPE.TREE);
+    }
     drive.tankDrive(leftPercent, rightPercent);
   }
 
