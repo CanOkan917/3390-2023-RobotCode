@@ -33,4 +33,9 @@ public final class Constants {
    */
   public static final Port SENSOR_NAVX_PORT = Port.kMXP;
 
+  /**
+   * LowPowerMode
+   */
+  public static enum LOWPOWERMODE_INCREASE_TYPE { ONE, TWO, TREE }
+
 }

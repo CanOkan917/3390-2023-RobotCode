@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.LOWPOWERMODE_INCREASE_TYPE;
+import frc.robot.utility.LowPowerMode;
 import frc.robot.utility.PID;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -41,7 +43,8 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("Balanced", balancePID.atSetpoint());    
+    SmartDashboard.putBoolean("Balanced", balancePID.atSetpoint());
+    SmartDashboard.putBoolean("LowPowerMode-DriveMotors Enabled", LowPowerMode.INSTANCE.getLowDriveModeEnabled());
   }
 
   /**
@@ -64,7 +67,13 @@ public class DriveSubsystem extends SubsystemBase {
    * @param rot Y ekseninde hız (%)
    */
   public void arcadeDrive(double fwd, double rot) {
-    drive.arcadeDrive(fwd, rot);
+    double fwd_new = fwd;
+    double rot_new = rot;
+    if (LowPowerMode.INSTANCE.getLowDriveModeEnabled()) {
+      fwd_new = LowPowerMode.INSTANCE.calculate(fwd, LOWPOWERMODE_INCREASE_TYPE.TREE);
+      rot_new = LowPowerMode.INSTANCE.calculate(rot, LOWPOWERMODE_INCREASE_TYPE.TREE);
+    }
+    drive.arcadeDrive(fwd_new, rot_new);
   }
 
   /**
