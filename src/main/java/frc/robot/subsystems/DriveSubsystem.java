@@ -21,7 +21,14 @@ public class DriveSubsystem extends SubsystemBase {
   private final DifferentialDrive drive = new DifferentialDrive(leftLeader, rightLeader);
 
   private final AHRS navX = new AHRS(Constants.SENSOR_NAVX_PORT);
-  private final PID balancePID = new PID(Constants.DRIVE_BALANCE_PID_KP, Constants.DRIVE_BALANCE_PID_KI, Constants.DRIVE_BALANCE_PID_KD, Constants.DRIVE_BALANCE_PID_TOLERANCE, Constants.DRIVE_BALANCE_PID_MAXOUT, Constants.DRIVE_BALANCE_PID_MINOUT);
+  private final PID balancePID = new PID(
+    Constants.DRIVE_BALANCE_PID_KP,
+    Constants.DRIVE_BALANCE_PID_KI,
+    Constants.DRIVE_BALANCE_PID_KD,
+    Constants.DRIVE_BALANCE_PID_TOLERANCE,
+    Constants.DRIVE_BALANCE_PID_MAXOUT,
+    Constants.DRIVE_BALANCE_PID_MINOUT
+  );
 
   public DriveSubsystem() {
     leftLeader.setInverted(Constants.DRIVE_LEFT_INVERTED);
@@ -31,11 +38,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     leftMotor2.follow(leftLeader);
     rightMotor2.follow(rightLeader);
-
-    /**
-     * Robot ilk açıldığında kalibrasyon yapmak önemlidir!
-     */
-    navX.calibrate();
+    
     resetSensors();
 
     balancePID.setSetpoint(0);
@@ -52,6 +55,15 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void resetSensors() {
     navX.reset();
+  }
+
+  /**
+   * Bütün sürüş ile alakalı sensörleri kalibre eder
+   * 
+   * Robot ilk açıldığında kalibrasyon yapmak önemlidir!
+   */
+  public void calibrateSensors() {
+    navX.calibrate();
   }
 
   /**

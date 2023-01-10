@@ -21,16 +21,20 @@ public class RobotContainer {
   private final Joystick rightStick = new Joystick(Constants.JOYSTICK_RIGHT_PORT);
   private final Joystick atari1 = new Joystick(Constants.JOYSTICK_ATARI1_PORT);
   private final Joystick atari2 = new Joystick(Constants.JOYSTICK_ATARI2_PORT);
+
+  private final BalanceRobotCommand balanceRobotCommand = new BalanceRobotCommand(driveSubsystem);
   
   public RobotContainer() {
     configureBindings();
 
-    driveSubsystem.setDefaultCommand(new DefaultCommand(driveSubsystem, leftStick, rightStick, atari1, atari2));
+    driveSubsystem.setDefaultCommand(new DefaultCommand(driveSubsystem, leftStick, rightStick, atari1));
   }
 
   private void configureBindings() {
-    new Trigger(() -> atari2.getRawButton(1)).whileTrue(new BalanceRobotCommand(driveSubsystem));
-    new Trigger(() -> atari2.getRawButton(0)).onTrue(LowPowerMode.INSTANCE.toggleLowDriveModeCommand());
+    new Trigger(() -> atari2.getRawButton(1)).whileTrue(balanceRobotCommand);
+    new Trigger(() -> atari2.getRawButton(7)).onTrue(LowPowerMode.INSTANCE.toggleLowDriveModeCommand());
+
+    new Trigger(() -> atari1.getRawButton(12)).whileTrue(balanceRobotCommand);
   }
 
   public Command getAutonomousCommand() {
