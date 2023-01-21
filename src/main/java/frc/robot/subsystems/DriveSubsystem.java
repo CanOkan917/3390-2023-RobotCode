@@ -1,32 +1,28 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.LOWPOWERMODE_INCREASE_TYPE;
 import frc.robot.utility.CompetitionShuffleboard;
 import frc.robot.utility.LowPowerMode;
 import frc.robot.utility.PID;
+import frc.robot.utility.drivers.LazyTalonSRX;
+import frc.robot.utility.drivers.TalonSRXCreator;
 
 public class DriveSubsystem extends SubsystemBase {
+
+  private final double mMotorDeadband = 0.02;
+  private final double mMotorMaxOut = 1.0;
   
-  private final ShuffleboardTab shuffleboard = CompetitionShuffleboard.INSTANCE.tab;
-  private final GenericEntry robotBalancedEntry = shuffleboard.add("Balanced", false).getEntry();
-  private final GenericEntry robotLowPowerModeEntry = shuffleboard.add("LowPowerMode-DriveMotors Enabled", false).getEntry();
-  private final GenericEntry robotPitch = shuffleboard.add("Roll", 0).getEntry();
-  private final GenericEntry robotBalancePIDOutput = shuffleboard.add("BalancePID-OUTPUT", 0).getEntry();
+  private boolean isBreakMode;
 
-  private final WPI_TalonSRX leftLeader  = new WPI_TalonSRX(Constants.DRIVE_LEFT_LEADER_ID);
-  private final WPI_TalonSRX leftMotor2  = new WPI_TalonSRX(Constants.DRIVE_LEFT_MOTOR2_ID);
-  private final WPI_TalonSRX rightLeader = new WPI_TalonSRX(Constants.DRIVE_RIGHT_LEADER_ID);
-  private final WPI_TalonSRX rightMotor2 = new WPI_TalonSRX(Constants.DRIVE_RIGHT_MOTOR2_ID);
+  private final CompetitionShuffleboard shuffleboard = CompetitionShuffleboard.INSTANCE;
 
-  private final DifferentialDrive drive = new DifferentialDrive(leftLeader, rightLeader);
+  private final LazyTalonSRX leftMaster, rightMaster, leftSlave, rightSlave;
 
   private final AHRS navX = new AHRS(Constants.SENSOR_NAVX_PORT);
   private final PID balancePID = new PID(
@@ -38,26 +34,23 @@ public class DriveSubsystem extends SubsystemBase {
     Constants.DRIVE_BALANCE_PID_MINOUT
   );
 
-  public DriveSubsystem() {
-    leftLeader.setInverted(Constants.DRIVE_LEFT_INVERTED);
-    leftMotor2.setInverted(Constants.DRIVE_LEFT_INVERTED);
-    rightLeader.setInverted(Constants.DRIVE_RIGHT_INVERTED);
-    rightMotor2.setInverted(Constants.DRIVE_RIGHT_INVERTED);
+  public DriveSubsystem() {    
+    leftMaster = TalonSRXCreator.createDefaultMasterTalon(Constants.DRIVE_LEFT_MASTER_ID);
+    leftSlave = TalonSRXCreator.createDefaultPermanentSlaveTalon(Constants.DRIVE_LEFT_SLAVE_ID, Constants.DRIVE_LEFT_MASTER_ID);
+    rightMaster = TalonSRXCreator.createDefaultMasterTalon(Constants.DRIVE_RIGHT_MASTER_ID);
+    rightSlave = TalonSRXCreator.createDefaultPermanentSlaveTalon(Constants.DRIVE_RIGHT_SLAVE_ID, Constants.DRIVE_RIGHT_MASTER_ID);
 
-    leftMotor2.follow(leftLeader);
-    rightMotor2.follow(rightLeader);
-    
-    resetSensors();
+    isBreakMode = true;
 
     balancePID.setSetpoint(0);
   }
 
   @Override
   public void periodic() {
-    robotBalancedEntry.setBoolean(balancePID.atSetpoint());
-    robotLowPowerModeEntry.setBoolean(LowPowerMode.INSTANCE.getLowDriveModeEnabled());
-    robotPitch.setDouble(Math.floor(navX.getRoll()) + Constants.DRIVE_NAVX_ROLL_DEADBAND);
-    robotBalancePIDOutput.setDouble(balancePID.output(balancePID.calculate(Math.floor(navX.getRoll()) + Constants.DRIVE_NAVX_ROLL_DEADBAND, 0)));
+    shuffleboard.robotBalancedEntry.setBoolean(balancePID.atSetpoint());
+    shuffleboard.robotLowPowerModeEntry.setBoolean(LowPowerMode.INSTANCE.getLowDriveModeEnabled());
+    shuffleboard.robotPitch.setDouble(Math.floor(navX.getRoll()) + Constants.DRIVE_NAVX_ROLL_DEADBAND);
+    shuffleboard.robotBalancePIDOutput.setDouble(balancePID.output(balancePID.calculate(Math.floor(navX.getRoll()) + Constants.DRIVE_NAVX_ROLL_DEADBAND, 0)));
   }
 
   /**
@@ -80,7 +73,25 @@ public class DriveSubsystem extends SubsystemBase {
    * Bütün motorları durdurur.
    */
   public void stopMotors() {
-    drive.stopMotor();
+    leftMaster.stopMotor();
+    rightMaster.stopMotor();
+  }
+
+  public boolean isBreakMode() {
+    return isBreakMode;
+  }
+
+  public void setBrakeMode(boolean shouldEnable) {
+    if (isBreakMode != shouldEnable) {
+      isBreakMode = shouldEnable;
+      NeutralMode mode = shouldEnable ? NeutralMode.Brake : NeutralMode.Coast;
+
+      leftMaster.setNeutralMode(mode);
+      leftSlave.setNeutralMode(mode);
+
+      rightMaster.setNeutralMode(mode);
+      rightSlave.setNeutralMode(mode);
+    }
   }
 
   /**
@@ -93,7 +104,7 @@ public class DriveSubsystem extends SubsystemBase {
       fwd = LowPowerMode.INSTANCE.calculate(fwd, LOWPOWERMODE_INCREASE_TYPE.TREE);
       rot = LowPowerMode.INSTANCE.calculate(rot, LOWPOWERMODE_INCREASE_TYPE.TREE);
     }
-    drive.arcadeDrive(fwd, rot);
+    this.arcadeDrive(fwd, rot, false);
   }
 
   /**
@@ -106,7 +117,7 @@ public class DriveSubsystem extends SubsystemBase {
       leftPercent = LowPowerMode.INSTANCE.calculate(leftPercent, LOWPOWERMODE_INCREASE_TYPE.TREE);
       rightPercent = LowPowerMode.INSTANCE.calculate(rightPercent, LOWPOWERMODE_INCREASE_TYPE.TREE);
     }
-    drive.tankDrive(leftPercent, rightPercent);
+    this.tankDrive(leftPercent, rightPercent, false);
   }
 
   /**
@@ -117,9 +128,52 @@ public class DriveSubsystem extends SubsystemBase {
     if (!balancePID.atSetpoint()) {
       double roll = Math.floor(navX.getRoll()) + Constants.DRIVE_NAVX_ROLL_DEADBAND;
       double calculatedSpeed = balancePID.output(balancePID.calculate(roll, 0));
-      drive.arcadeDrive(calculatedSpeed, 0);
+      this.arcadeDrive(calculatedSpeed, 0, false);
     } else {
-      drive.stopMotor();
+      this.stopMotors();
     }
+  }
+
+  private void arcadeDrive(double fwd, double rot, boolean squareInputs) {
+    fwd = MathUtil.applyDeadband(fwd, mMotorDeadband);
+    rot = MathUtil.applyDeadband(rot, mMotorDeadband);
+    fwd = MathUtil.clamp(fwd, -1.0, -1.0);
+    rot = MathUtil.clamp(rot, -1.0, -1.0);
+
+    if (squareInputs) {
+      fwd = Math.copySign(fwd * fwd, fwd);
+      rot = Math.copySign(rot * rot, rot);
+    }
+
+    double leftSpeed = fwd - rot;
+    double rightSpeed = fwd + rot;
+
+    double greaterInput = Math.max(Math.abs(fwd), Math.abs(rot));
+    double lesserInput = Math.min(Math.abs(fwd), Math.abs(rot));
+    if (greaterInput == 0.0) {
+      leftMaster.set(0.0 * mMotorMaxOut);
+      rightMaster.set(0.0 * mMotorMaxOut);
+    }
+    double saturatedInput = (greaterInput + lesserInput) / greaterInput;
+    leftSpeed /= saturatedInput;
+    rightSpeed /= saturatedInput;
+
+    leftMaster.set(leftSpeed * mMotorMaxOut);
+    rightMaster.set(rightSpeed * mMotorMaxOut);
+  }
+
+  private void tankDrive(double left, double right, boolean squareInputs) {
+    left = MathUtil.applyDeadband(left, mMotorDeadband);
+    right = MathUtil.applyDeadband(right, mMotorDeadband);
+    left = MathUtil.clamp(left, -1.0, -1.0);
+    right = MathUtil.clamp(right, -1.0, -1.0);
+
+    if (squareInputs) {
+      left = Math.copySign(left * left, left);
+      right = Math.copySign(right * right, right);
+    }
+
+    leftMaster.set(left * mMotorMaxOut);
+    rightMaster.set(right * mMotorMaxOut);
   }
 }

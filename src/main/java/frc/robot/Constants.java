@@ -21,10 +21,10 @@ public final class Constants {
   /**
    * Sürüş motorları ID'lerinin tanımlanması
    */
-  public static final int DRIVE_LEFT_LEADER_ID = 0;
-  public static final int DRIVE_LEFT_MOTOR2_ID = 9;
-  public static final int DRIVE_RIGHT_LEADER_ID = 11;
-  public static final int DRIVE_RIGHT_MOTOR2_ID = 1;
+  public static final int DRIVE_LEFT_MASTER_ID = 0;
+  public static final int DRIVE_LEFT_SLAVE_ID = 9;
+  public static final int DRIVE_RIGHT_MASTER_ID = 11;
+  public static final int DRIVE_RIGHT_SLAVE_ID = 1;
   public static final boolean DRIVE_LEFT_INVERTED = true;
   public static final boolean DRIVE_RIGHT_INVERTED = false;
   public static final int DRIVE_NAVX_ROLL_DEADBAND = 7;
