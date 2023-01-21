@@ -31,6 +31,8 @@ public class RobotContainer {
   
   public RobotContainer() {
     configureBindings();
+    
+    driveSubsystem.resetSensors();
 
     driveSubsystem.setDefaultCommand(new DefaultCommand(driveSubsystem, leftStick, rightStick));
   }

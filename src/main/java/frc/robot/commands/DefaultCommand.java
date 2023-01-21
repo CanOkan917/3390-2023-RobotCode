@@ -9,9 +9,6 @@ import frc.robot.subsystems.DriveSubsystem;
 public class DefaultCommand extends SequentialCommandGroup {
 
   public DefaultCommand(DriveSubsystem driveSubsystem, Joystick left, Joystick right) {
-    System.out.println("Default command initialize");
-    driveSubsystem.calibrateSensors();
-
     addCommands(
       new ParallelCommandGroup(
         new TankDriveCommand(driveSubsystem, left, right)
