@@ -10,8 +10,8 @@ public class CompetitionShuffleboard {
   public static CompetitionShuffleboard INSTANCE = new CompetitionShuffleboard();
 
   public CompetitionShuffleboard() {
-    tab = Shuffleboard.getTab("SmartDashbooard");
-    Shuffleboard.selectTab("SmartDashbooard");
+    tab = Shuffleboard.getTab("Control Panel");
+    Shuffleboard.selectTab("Control Panel");
   }
 
 }

@@ -3,16 +3,24 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.LOWPOWERMODE_INCREASE_TYPE;
+import frc.robot.utility.CompetitionShuffleboard;
 import frc.robot.utility.LowPowerMode;
 import frc.robot.utility.PID;
 
 public class DriveSubsystem extends SubsystemBase {
   
+  private final ShuffleboardTab shuffleboard = CompetitionShuffleboard.INSTANCE.tab;
+  private final GenericEntry robotBalancedEntry = shuffleboard.add("Balanced", false).getEntry();
+  private final GenericEntry robotLowPowerModeEntry = shuffleboard.add("LowPowerMode-DriveMotors Enabled", false).getEntry();
+  private final GenericEntry robotPitch = shuffleboard.add("Roll", 0).getEntry();
+  private final GenericEntry robotBalancePIDOutput = shuffleboard.add("BalancePID-OUTPUT", 0).getEntry();
+
   private final WPI_TalonSRX leftLeader  = new WPI_TalonSRX(Constants.DRIVE_LEFT_LEADER_ID);
   private final WPI_TalonSRX leftMotor2  = new WPI_TalonSRX(Constants.DRIVE_LEFT_MOTOR2_ID);
   private final WPI_TalonSRX rightLeader = new WPI_TalonSRX(Constants.DRIVE_RIGHT_LEADER_ID);
@@ -46,8 +54,10 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("Balanced", balancePID.atSetpoint());
-    SmartDashboard.putBoolean("LowPowerMode-DriveMotors Enabled", LowPowerMode.INSTANCE.getLowDriveModeEnabled());
+    robotBalancedEntry.setBoolean(balancePID.atSetpoint());
+    robotLowPowerModeEntry.setBoolean(LowPowerMode.INSTANCE.getLowDriveModeEnabled());
+    robotPitch.setDouble(Math.floor(navX.getRoll()) + Constants.DRIVE_NAVX_ROLL_DEADBAND);
+    robotBalancePIDOutput.setDouble(balancePID.output(balancePID.calculate(Math.floor(navX.getRoll()) + Constants.DRIVE_NAVX_ROLL_DEADBAND, 0)));
   }
 
   /**
@@ -99,10 +109,14 @@ public class DriveSubsystem extends SubsystemBase {
     drive.tankDrive(leftPercent, rightPercent);
   }
 
+  /**
+   * Robotun rampanın üzerinde dengede durabilmesi için hazırlanmış
+   * PID kontrolcüsü eşliğinde çalışan hizzalama bölümü
+   */
   public void balanceRobot() {
     if (!balancePID.atSetpoint()) {
-      double pitch = navX.getPitch();
-      double calculatedSpeed = balancePID.output(balancePID.calculate(pitch, 0));
+      double roll = Math.floor(navX.getRoll()) + Constants.DRIVE_NAVX_ROLL_DEADBAND;
+      double calculatedSpeed = balancePID.output(balancePID.calculate(roll, 0));
       drive.arcadeDrive(calculatedSpeed, 0);
     } else {
       drive.stopMotor();

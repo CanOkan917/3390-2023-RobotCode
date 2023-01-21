@@ -5,6 +5,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.utility.PID;
@@ -32,7 +33,7 @@ public class LimelightSubsystem extends SubsystemBase {
   private double lastTargetX;
   private double lastTargetY;
 
-  public static LimelightSubsystem INSTANCE = new LimelightSubsystem();
+  // public static LimelightSubsystem INSTANCE = new LimelightSubsystem();
 
   public LimelightSubsystem() {
     networkTable = NetworkTableInstance.getDefault().getTable("limelight");
@@ -114,11 +115,27 @@ public class LimelightSubsystem extends SubsystemBase {
   }
 
   /**
+   * LED modunu ayarlar
+   * @param mode LED modu
+   */
+  public CommandBase setLedModeCommand(Constants.LIMELIGHT_LIGHT_MODE mode) {
+    return runOnce(() -> setLedMode(mode));
+  }
+
+  /**
    * Kamera modunu ayarlar
    * @param mode Kamera modu
    */
   public void setCamMode(Constants.LIMELIGHT_CAMERA_MODE mode) {
     getValue("camMode").setNumber(mode.ordinal());
+  }
+
+  /**
+   * Kamera modunu ayarlar
+   * @param mode Kamera modu
+   */
+  public CommandBase setCamModeCommand(Constants.LIMELIGHT_CAMERA_MODE mode) {
+    return runOnce(() -> setCamMode(mode));
   }
 
   /**
