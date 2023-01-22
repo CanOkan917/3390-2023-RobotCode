@@ -47,6 +47,11 @@ public class DriveSubsystem extends SubsystemBase {
     rightMaster = TalonSRXCreator.createDefaultMasterTalon(Constants.DRIVE_RIGHT_MASTER_ID);
     rightSlave = TalonSRXCreator.createDefaultPermanentSlaveTalon(Constants.DRIVE_RIGHT_SLAVE_ID, Constants.DRIVE_RIGHT_MASTER_ID);
 
+    leftMaster.setInverted(Constants.DRIVE_LEFT_INVERTED);
+    leftSlave.setInverted(Constants.DRIVE_LEFT_INVERTED);
+    rightMaster.setInverted(Constants.DRIVE_RIGHT_INVERTED);
+    rightSlave.setInverted(Constants.DRIVE_RIGHT_INVERTED);
+
     isBreakMode = true;
 
     driveController = new DriveController(leftMaster, rightMaster);
@@ -95,7 +100,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
   }
 
-  public void arcadeDrive(double fwd, double rot) {
+  public void arcadeDrivePercent(double fwd, double rot) {
     if (LowPowerMode.INSTANCE.getLowDriveModeEnabled()) {
       fwd = LowPowerMode.INSTANCE.calculate(fwd, LOWPOWERMODE_INCREASE_TYPE.TREE);
       rot = LowPowerMode.INSTANCE.calculate(rot, LOWPOWERMODE_INCREASE_TYPE.TREE);

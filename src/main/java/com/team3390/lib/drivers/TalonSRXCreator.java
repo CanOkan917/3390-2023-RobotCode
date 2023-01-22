@@ -27,6 +27,12 @@ public class TalonSRXCreator {
     return talon;
   }
 
+  public static LazyTalonSRX createCustomPermanentSlaveTalon(int id, int master_id, Configuration config) {
+    final LazyTalonSRX talon = createTalon(id, config);
+    talon.set(ControlMode.Follower, master_id);
+    return talon;
+  }
+
   public static LazyTalonSRX createTalon(int id, Configuration config) {
     LazyTalonSRX talon = new LazyTalonSRX(id);
     talon.set(ControlMode.PercentOutput, 0.0);
