@@ -8,8 +8,8 @@ package com.team3390.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import com.team3390.robot.commands.DefaultCommand;
 import com.team3390.robot.commands.drive.BalanceRobotCommand;
+import com.team3390.robot.commands.drive.TankDriveCommand;
 import com.team3390.robot.commands.utility.ResetSensorsCommand;
 import com.team3390.robot.subsystems.DriveSubsystem;
 import com.team3390.robot.utility.LowPowerMode;
@@ -40,7 +40,11 @@ public class RobotContainer {
     
     driveSubsystem.resetSensors();
 
-    driveSubsystem.setDefaultCommand(new DefaultCommand(driveSubsystem, leftStick, rightStick));
+    driveSubsystem.setDefaultCommand(new TankDriveCommand(
+      driveSubsystem,
+      () -> leftStick.getY(),
+      () -> rightStick.getY()
+    ));
   }
 
   public Command getAutonomousCommand() {

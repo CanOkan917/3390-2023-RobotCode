@@ -33,7 +33,7 @@ public final class Constants {
   public static final double DRIVE_BALANCE_PID_KD = 0;
   public static final double DRIVE_BALANCE_PID_TOLERANCE = 5;
   public static final double DRIVE_BALANCE_PID_MAXOUT = 0.5;
-  public static final double DRIVE_BALANCE_PID_MINOUT = 0.5 * -1;
+  public static final double DRIVE_BALANCE_PID_MINOUT = DRIVE_BALANCE_PID_MAXOUT * -1;
 
   /**
    * Sensörler
@@ -55,7 +55,7 @@ public final class Constants {
   public static final double LIMELIGHT_PID_KD = 0;
   public static final double LIMELIGHT_PID_TOLERANCE = 0;
   public static final double LIMELIGHT_PID_MAX_OUT = 0.7;
-  public static final double LIMELIGHT_PID_MIN_OUT = -0.7;
+  public static final double LIMELIGHT_PID_MIN_OUT = LIMELIGHT_PID_MAX_OUT * -1;
   public static final double LIMELIGHT_PID_X_DEADBAND = 0;
   public static final double LIMELIGHT_PID_Y_DEADBAND = 0;
   public static enum LIMELIGHT_LIGHT_MODE {

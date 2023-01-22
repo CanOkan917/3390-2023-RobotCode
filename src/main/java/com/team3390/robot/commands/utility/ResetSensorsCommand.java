@@ -9,7 +9,7 @@ public class ResetSensorsCommand extends CommandBase {
 
   public ResetSensorsCommand(DriveSubsystem driveSubsystem) {
     this.driveSubsystem = driveSubsystem;
-    addRequirements(this.driveSubsystem);
+    addRequirements(driveSubsystem);
   }
 
   @Override

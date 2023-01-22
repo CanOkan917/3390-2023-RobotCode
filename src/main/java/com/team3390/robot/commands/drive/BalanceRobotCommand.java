@@ -9,7 +9,7 @@ public class BalanceRobotCommand extends CommandBase {
 
   public BalanceRobotCommand(DriveSubsystem driveSubsystem) {
     this.driveSubsystem = driveSubsystem;
-    addRequirements(this.driveSubsystem);
+    addRequirements(driveSubsystem);
   }
 
   @Override

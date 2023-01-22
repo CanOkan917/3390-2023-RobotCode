@@ -58,29 +58,22 @@ public class DriveSubsystem extends SubsystemBase {
   public void periodic() {
     shuffleboard.robotBalancedEntry.setBoolean(balancePID.atSetpoint());
     shuffleboard.robotLowPowerModeEntry.setBoolean(LowPowerMode.INSTANCE.getLowDriveModeEnabled());
-    shuffleboard.robotPitch.setDouble(Math.floor(navX.getRoll()) + Constants.DRIVE_NAVX_ROLL_DEADBAND);
-    shuffleboard.robotBalancePIDOutput.setDouble(balancePID.output(balancePID.calculate(Math.floor(navX.getRoll()) + Constants.DRIVE_NAVX_ROLL_DEADBAND, 0)));
+    shuffleboard.robotPitch.setDouble(getRobotRoll());
+    shuffleboard.robotBalancePIDOutput.setDouble(balancePID.output(balancePID.calculate(getRobotRoll(), 0)));
   }
 
-  /**
-   * Bütün sürüş ile alakalı sensörleri sıfırlar
-   */
+  public double getRobotRoll() {
+    return Math.floor(navX.getRoll()) + Constants.DRIVE_NAVX_ROLL_DEADBAND;
+  }
+
   public void resetSensors() {
     navX.reset();
   }
 
-  /**
-   * Bütün sürüş ile alakalı sensörleri kalibre eder
-   * 
-   * Robot ilk açıldığında kalibrasyon yapmak önemlidir!
-   */
   public void calibrateSensors() {
     navX.calibrate();
   }
 
-  /**
-   * Bütün motorları durdurur.
-   */
   public void stopMotors() {
     driveController.stopMotors();
   }
@@ -102,11 +95,6 @@ public class DriveSubsystem extends SubsystemBase {
     }
   }
 
-  /**
-   * Robotun arcade tarzda sürülmesini sağlar
-   * @param fwd X ekseninde hız (%)
-   * @param rot Y ekseninde hız (%)
-   */
   public void arcadeDrive(double fwd, double rot) {
     if (LowPowerMode.INSTANCE.getLowDriveModeEnabled()) {
       fwd = LowPowerMode.INSTANCE.calculate(fwd, LOWPOWERMODE_INCREASE_TYPE.TREE);
@@ -115,11 +103,6 @@ public class DriveSubsystem extends SubsystemBase {
     driveController.arcadeDrive(fwd, rot, false);
   }
 
-  /**
-   * Robotun tank tarzında sürülmesini sağlar
-   * @param leftPercent Sol tekereklere gidecek hız (%)
-   * @param rightPercent Sağ tekereklere gidecek hız (%)
-   */
   public void tankDrivePercent(double leftPercent, double rightPercent) {
     if (LowPowerMode.INSTANCE.getLowDriveModeEnabled()) {
       leftPercent = LowPowerMode.INSTANCE.calculate(leftPercent, LOWPOWERMODE_INCREASE_TYPE.TREE);
@@ -128,10 +111,6 @@ public class DriveSubsystem extends SubsystemBase {
     driveController.tankDrive(leftPercent, rightPercent, false);
   }
 
-  /**
-   * Robotun rampanın üzerinde dengede durabilmesi için hazırlanmış
-   * PID kontrolcüsü eşliğinde çalışan hizzalama bölümü
-   */
   public void balanceRobot() {
     if (!balancePID.atSetpoint()) {
       double roll = Math.floor(navX.getRoll()) + Constants.DRIVE_NAVX_ROLL_DEADBAND;
