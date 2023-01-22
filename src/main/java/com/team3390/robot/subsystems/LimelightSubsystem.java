@@ -156,11 +156,11 @@ public class LimelightSubsystem extends SubsystemBase {
   }
 
   public boolean XAtSetpoint() {
-    return Math.abs(tX.getDouble(0)) <= 1.5;
+    return Math.abs(tX.getDouble(0)) <= Constants.LIMELIGHT_PID_X_DEADBAND;
   }
 
   public boolean YAtSetpoint() {
-    return Math.abs(tY.getDouble(0)) <= 3;
+    return Math.abs(tY.getDouble(0)) <= Constants.LIMELIGHT_PID_Y_DEADBAND;
   }
 
   /**

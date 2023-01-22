@@ -16,6 +16,7 @@ import com.team3390.robot.utility.PID;
 
 public class DriveSubsystem extends SubsystemBase {
   
+  private static DriveSubsystem instance; 
   private final CompetitionShuffleboard shuffleboard = CompetitionShuffleboard.INSTANCE;
 
   private boolean isBreakMode;
@@ -32,6 +33,13 @@ public class DriveSubsystem extends SubsystemBase {
     Constants.DRIVE_BALANCE_PID_MAXOUT,
     Constants.DRIVE_BALANCE_PID_MINOUT
   );
+
+  public synchronized static DriveSubsystem getInstance() {
+    if (instance == null) {
+      instance = new DriveSubsystem();
+    }
+    return instance;
+  }
 
   public DriveSubsystem() {    
     leftMaster = TalonSRXCreator.createDefaultMasterTalon(Constants.DRIVE_LEFT_MASTER_ID);

@@ -18,7 +18,7 @@ public class RobotContainer {
 
   private final LowPowerMode lowPowerMode = LowPowerMode.INSTANCE;
 
-  private final DriveSubsystem driveSubsystem = new DriveSubsystem();
+  private final DriveSubsystem driveSubsystem = DriveSubsystem.getInstance();
   // private final LimelightSubsystem limelightSubsystem = LimelightSubsystem.INSTANCE;
 
   private final Joystick leftStick = new Joystick(Constants.JOYSTICK_LEFT_PORT);
@@ -30,14 +30,6 @@ public class RobotContainer {
   private final ResetSensorsCommand resetSensorsCommand = new ResetSensorsCommand(driveSubsystem);
   
   public RobotContainer() {
-    configureBindings();
-    
-    driveSubsystem.resetSensors();
-
-    driveSubsystem.setDefaultCommand(new DefaultCommand(driveSubsystem, leftStick, rightStick));
-  }
-
-  private void configureBindings() {
     // new Trigger(() -> leftStick.getRawButton(2)).onTrue(limelightSubsystem.setCamModeCommand(LIMELIGHT_CAMERA_MODE.DRIVE));
     // new Trigger(() -> leftStick.getRawButton(4)).onTrue(limelightSubsystem.setCamModeCommand(LIMELIGHT_CAMERA_MODE.VISION));
 
@@ -45,7 +37,10 @@ public class RobotContainer {
     new Trigger(() -> rightStick.getRawButton(2)).onTrue(lowPowerMode.toggleLowDriveModeCommand());
 
     new Trigger(() -> leftStick.getRawButton(12)).onTrue(resetSensorsCommand);
-    // new Trigger(() -> );
+    
+    driveSubsystem.resetSensors();
+
+    driveSubsystem.setDefaultCommand(new DefaultCommand(driveSubsystem, leftStick, rightStick));
   }
 
   public Command getAutonomousCommand() {

@@ -56,6 +56,8 @@ public final class Constants {
   public static final double LIMELIGHT_PID_TOLERANCE = 0;
   public static final double LIMELIGHT_PID_MAX_OUT = 0.7;
   public static final double LIMELIGHT_PID_MIN_OUT = -0.7;
+  public static final double LIMELIGHT_PID_X_DEADBAND = 0;
+  public static final double LIMELIGHT_PID_Y_DEADBAND = 0;
   public static enum LIMELIGHT_LIGHT_MODE {
     PIPELINE_VALUE, OFF, BLINK, ON
   }
