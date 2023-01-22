@@ -1,8 +1,8 @@
-package com.team3390.commands.drive;
+package com.team3390.robot.commands.drive;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import com.team3390.subsystems.DriveSubsystem;
+import com.team3390.robot.subsystems.DriveSubsystem;
 
 public class TankDriveCommand extends CommandBase {
   

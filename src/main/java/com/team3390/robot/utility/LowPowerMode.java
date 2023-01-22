@@ -1,6 +1,6 @@
-package com.team3390.utility;
+package com.team3390.robot.utility;
 
-import com.team3390.Constants.LOWPOWERMODE_INCREASE_TYPE;
+import com.team3390.robot.Constants.LOWPOWERMODE_INCREASE_TYPE;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;

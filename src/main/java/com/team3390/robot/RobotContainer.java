@@ -3,16 +3,16 @@
  * @since 08-01-2023
  */
 
-package com.team3390;
+package com.team3390.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import com.team3390.commands.DefaultCommand;
-import com.team3390.commands.drive.BalanceRobotCommand;
-import com.team3390.commands.utility.ResetSensorsCommand;
-import com.team3390.subsystems.DriveSubsystem;
-import com.team3390.utility.LowPowerMode;
+import com.team3390.robot.commands.DefaultCommand;
+import com.team3390.robot.commands.drive.BalanceRobotCommand;
+import com.team3390.robot.commands.utility.ResetSensorsCommand;
+import com.team3390.robot.subsystems.DriveSubsystem;
+import com.team3390.robot.utility.LowPowerMode;
 
 public class RobotContainer {
 

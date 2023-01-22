@@ -1,24 +1,24 @@
-package com.team3390.commands.utility;
+package com.team3390.robot.commands.drive;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import com.team3390.subsystems.DriveSubsystem;
+import com.team3390.robot.subsystems.DriveSubsystem;
 
-public class ResetSensorsCommand extends CommandBase {
+public class BalanceRobotCommand extends CommandBase {
   
   private final DriveSubsystem driveSubsystem;
 
-  public ResetSensorsCommand(DriveSubsystem driveSubsystem) {
+  public BalanceRobotCommand(DriveSubsystem driveSubsystem) {
     this.driveSubsystem = driveSubsystem;
     addRequirements(this.driveSubsystem);
   }
 
   @Override
-  public void initialize() {
-    driveSubsystem.resetSensors();
-  }
+  public void initialize() {}
 
   @Override
-  public void execute() {}
+  public void execute() {
+    driveSubsystem.balanceRobot();
+  }
 
   @Override
   public void end(boolean interrupted) {}
