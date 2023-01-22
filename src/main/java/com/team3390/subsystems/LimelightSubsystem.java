@@ -1,4 +1,6 @@
-package frc.robot.subsystems;
+package com.team3390.subsystems;
+
+import com.team3390.Constants;
 
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable;
@@ -7,9 +9,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.utility.PID;
-import frc.robot.utility.CompetitionShuffleboard;
+import com.team3390.utility.PID;
+import com.team3390.utility.CompetitionShuffleboard;
 
 public class LimelightSubsystem extends SubsystemBase {
 

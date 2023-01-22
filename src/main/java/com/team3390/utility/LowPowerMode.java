@@ -1,4 +1,6 @@
-package frc.robot.utility;
+package com.team3390.utility;
+
+import com.team3390.Constants.LOWPOWERMODE_INCREASE_TYPE;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -6,7 +8,6 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.LOWPOWERMODE_INCREASE_TYPE;
 
 public class LowPowerMode extends SubsystemBase {
   

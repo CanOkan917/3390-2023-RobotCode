@@ -3,16 +3,16 @@
  * @since 08-01-2023
  */
 
-package frc.robot;
+package com.team3390;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.DefaultCommand;
-import frc.robot.commands.drive.BalanceRobotCommand;
-import frc.robot.commands.utility.ResetSensorsCommand;
-import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.utility.LowPowerMode;
+import com.team3390.commands.DefaultCommand;
+import com.team3390.commands.drive.BalanceRobotCommand;
+import com.team3390.commands.utility.ResetSensorsCommand;
+import com.team3390.subsystems.DriveSubsystem;
+import com.team3390.utility.LowPowerMode;
 
 public class RobotContainer {
 

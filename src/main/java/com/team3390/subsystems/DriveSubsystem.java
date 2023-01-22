@@ -1,17 +1,17 @@
-package frc.robot.subsystems;
+package com.team3390.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.Constants.LOWPOWERMODE_INCREASE_TYPE;
-import frc.robot.utility.CompetitionShuffleboard;
-import frc.robot.utility.LowPowerMode;
-import frc.robot.utility.PID;
-import frc.robot.utility.drivers.LazyTalonSRX;
-import frc.robot.utility.drivers.TalonSRXCreator;
+import com.team3390.Constants;
+import com.team3390.Constants.LOWPOWERMODE_INCREASE_TYPE;
+import com.team3390.utility.CompetitionShuffleboard;
+import com.team3390.utility.LowPowerMode;
+import com.team3390.utility.PID;
+import com.team3390.utility.drivers.LazyTalonSRX;
+import com.team3390.utility.drivers.TalonSRXCreator;
 
 public class DriveSubsystem extends SubsystemBase {
 

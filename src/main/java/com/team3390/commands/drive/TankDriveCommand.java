@@ -1,8 +1,8 @@
-package frc.robot.commands.drive;
+package com.team3390.commands.drive;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveSubsystem;
+import com.team3390.subsystems.DriveSubsystem;
 
 public class TankDriveCommand extends CommandBase {
   
