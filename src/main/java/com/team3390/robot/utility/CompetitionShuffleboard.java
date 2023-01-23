@@ -10,14 +10,14 @@ public class CompetitionShuffleboard {
 
   public static CompetitionShuffleboard INSTANCE = new CompetitionShuffleboard();
 
-  public final GenericEntry robotBalancedEntry = tab.add("Balanced", false).getEntry();
-  public final GenericEntry robotLowPowerModeEntry = tab.add("LowPowerMode-DriveMotors Enabled", false).getEntry();
-  public final GenericEntry robotPitch = tab.add("Roll", 0).getEntry();
-  public final GenericEntry robotBalancePIDOutput = tab.add("BalancePID-OUTPUT", 0).getEntry();
+  public final GenericEntry robotBalancedEntry;
+  public final GenericEntry robotLowPowerModeEntry;
 
   public CompetitionShuffleboard() {
     tab = Shuffleboard.getTab("Control Panel");
     Shuffleboard.selectTab("Control Panel");
-  }
+
+    robotBalancedEntry = tab.add("Balanced", false).getEntry();
+    robotLowPowerModeEntry = tab.add("LowPowerMode-DriveMotors Enabled", false).getEntry();  }
 
 }

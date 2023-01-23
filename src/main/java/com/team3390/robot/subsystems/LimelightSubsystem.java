@@ -33,7 +33,14 @@ public class LimelightSubsystem extends SubsystemBase {
   private double lastTargetX;
   private double lastTargetY;
 
-  // public static LimelightSubsystem INSTANCE = new LimelightSubsystem();
+  private static LimelightSubsystem instance;
+
+  public static synchronized LimelightSubsystem getInstance() {
+    if (instance == null) {
+      instance = new LimelightSubsystem();
+    }
+    return instance;
+  }
 
   public LimelightSubsystem() {
     networkTable = NetworkTableInstance.getDefault().getTable("limelight");
@@ -71,7 +78,7 @@ public class LimelightSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (!Constants.ROBOT_FIELD_MODE) {
+    if (Constants.ROBOT_FIELD_MODE) {
       shuffleBoard.add("LM-X-Output", getXOutput());
       shuffleBoard.add("LM-X-Output", getYOutput());
 

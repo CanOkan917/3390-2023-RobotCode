@@ -63,8 +63,6 @@ public class DriveSubsystem extends SubsystemBase {
   public void periodic() {
     shuffleboard.robotBalancedEntry.setBoolean(balancePID.atSetpoint());
     shuffleboard.robotLowPowerModeEntry.setBoolean(LowPowerMode.INSTANCE.getLowDriveModeEnabled());
-    shuffleboard.robotPitch.setDouble(getRobotRoll());
-    shuffleboard.robotBalancePIDOutput.setDouble(balancePID.output(balancePID.calculate(getRobotRoll(), 0)));
   }
 
   public double getRobotRoll() {
