@@ -3,9 +3,10 @@ package com.team3390.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import com.team3390.lib.control.DriveController;
 import com.team3390.lib.drivers.LazyTalonSRX;
 import com.team3390.lib.drivers.TalonSRXCreator;
 import com.team3390.robot.Constants;
@@ -22,7 +23,7 @@ public class DriveSubsystem extends SubsystemBase {
   private boolean isBreakMode;
 
   private final LazyTalonSRX leftMaster, rightMaster, leftSlave, rightSlave;
-  private final DriveController driveController;
+  private final DifferentialDrive driveController;
 
   private final AHRS navX = new AHRS(Constants.SENSOR_NAVX_PORT);
   private final PID balancePID = new PID(
@@ -33,6 +34,8 @@ public class DriveSubsystem extends SubsystemBase {
     Constants.DRIVE_BALANCE_PID_MAXOUT,
     Constants.DRIVE_BALANCE_PID_MINOUT
   );
+
+  private final LimelightSubsystem limelight = LimelightSubsystem.getInstance();
 
   public synchronized static DriveSubsystem getInstance() {
     if (instance == null) {
@@ -52,21 +55,27 @@ public class DriveSubsystem extends SubsystemBase {
     rightMaster.setInverted(Constants.DRIVE_RIGHT_INVERTED);
     rightSlave.setInverted(Constants.DRIVE_RIGHT_INVERTED);
 
-    isBreakMode = true;
+    isBreakMode = false;
 
-    driveController = new DriveController(leftMaster, rightMaster);
+    driveController = new DifferentialDrive(leftMaster, rightMaster);
 
     balancePID.setSetpoint(0);
   }
 
   @Override
   public void periodic() {
-    shuffleboard.robotBalancedEntry.setBoolean(balancePID.atSetpoint());
+    shuffleboard.robotBalancedEntry.setBoolean(isBalanced());
     shuffleboard.robotLowPowerModeEntry.setBoolean(LowPowerMode.INSTANCE.getLowDriveModeEnabled());
+    SmartDashboard.putNumber("nivix", getRobotRoll());
   }
 
   public double getRobotRoll() {
     return Math.floor(navX.getRoll()) + Constants.DRIVE_NAVX_ROLL_DEADBAND;
+  }
+
+  public boolean isBalanced() {
+    balancePID.calculate(getRobotRoll(), 0);
+    return balancePID.atSetpoint();
   }
 
   public void resetSensors() {
@@ -78,7 +87,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void stopMotors() {
-    driveController.stopMotors();
+    driveController.stopMotor();
   }
 
   public boolean isBreakMode() {
@@ -103,7 +112,7 @@ public class DriveSubsystem extends SubsystemBase {
       fwd = LowPowerMode.INSTANCE.calculate(fwd, LOWPOWERMODE_INCREASE_TYPE.TREE);
       rot = LowPowerMode.INSTANCE.calculate(rot, LOWPOWERMODE_INCREASE_TYPE.TREE);
     }
-    driveController.arcadeDrive(fwd, rot, false);
+    driveController.arcadeDrive(fwd, rot);
   }
 
   public void tankDrivePercent(double leftPercent, double rightPercent) {
@@ -111,16 +120,24 @@ public class DriveSubsystem extends SubsystemBase {
       leftPercent = LowPowerMode.INSTANCE.calculate(leftPercent, LOWPOWERMODE_INCREASE_TYPE.TREE);
       rightPercent = LowPowerMode.INSTANCE.calculate(rightPercent, LOWPOWERMODE_INCREASE_TYPE.TREE);
     }
-    driveController.tankDrive(leftPercent, rightPercent, false);
+    driveController.tankDrive(leftPercent, rightPercent);
   }
 
   public void balanceRobot() {
     if (!balancePID.atSetpoint()) {
       double roll = Math.floor(navX.getRoll()) + Constants.DRIVE_NAVX_ROLL_DEADBAND;
-      double calculatedSpeed = balancePID.output(balancePID.calculate(roll, 0));
-      driveController.arcadeDrive(calculatedSpeed, 0, false);
+      double calculatedSpeed = -balancePID.output(balancePID.calculate(roll, 0));
+      driveController.arcadeDrive(calculatedSpeed, 0);
     } else {
-      driveController.stopMotors();
+      driveController.stopMotor();
+    }
+  }
+
+  public void lockTarget() {
+    if (limelight.isTarget() && !limelight.atSetpoint()) {
+      double xSpeed = -limelight.getXOutput();
+      double ySpeed = -limelight.getYOutput();
+      arcadeDrivePercent(ySpeed, xSpeed);
     }
   }
 }
