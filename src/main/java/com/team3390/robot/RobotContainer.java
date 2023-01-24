@@ -9,7 +9,9 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+import com.team3390.robot.Constants.LIMELIGHT_CAMERA_MODE;
 import com.team3390.robot.Constants.LIMELIGHT_LIGHT_MODE;
+import com.team3390.robot.commands.autonomous.LimelightLockAndDrive;
 import com.team3390.robot.commands.drive.BalanceRobotCommand;
 import com.team3390.robot.commands.drive.LockTargetCommand;
 import com.team3390.robot.commands.drive.TankDriveCommand;
@@ -40,6 +42,8 @@ public class RobotContainer {
     new Trigger(() -> rightStick.getRawButton(1)).whileTrue(balanceRobotCommand);
     new Trigger(() -> rightStick.getRawButton(2)).onTrue(lowPowerMode.toggleLowDriveModeCommand());
 
+    new Trigger(() -> leftStick.getRawButton(4)).onTrue(limelightSubsystem.setCamModeCommand(LIMELIGHT_CAMERA_MODE.DRIVE));
+    new Trigger(() -> leftStick.getRawButton(5)).onTrue(limelightSubsystem.setCamModeCommand(LIMELIGHT_CAMERA_MODE.VISION));
     new Trigger(() -> leftStick.getRawButton(6)).onTrue(resetSensorsCommand);
     new Trigger(() -> leftStick.getRawButton(1)).whileTrue(lockTargetCommand);
     
@@ -55,6 +59,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return null;
+    return new LimelightLockAndDrive(driveSubsystem);
   }
 }

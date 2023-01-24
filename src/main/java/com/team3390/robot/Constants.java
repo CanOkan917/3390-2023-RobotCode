@@ -35,14 +35,14 @@ public final class Constants {
     ONE, TWO, TREE
   }
 
-  public static final double LIMELIGHT_PID_KP = 0.1;
-  public static final double LIMELIGHT_PID_KI = 0;
-  public static final double LIMELIGHT_PID_KD = 0;
+  public static final double LIMELIGHT_PID_KP = 0.19;
+  public static final double LIMELIGHT_PID_KI = 0.05;
+  public static final double LIMELIGHT_PID_KD = 0.005;
   public static final double LIMELIGHT_PID_TOLERANCE = 0;
-  public static final double LIMELIGHT_PID_MAX_OUT = 0.6;
+  public static final double LIMELIGHT_PID_MAX_OUT = 0.65;
   public static final double LIMELIGHT_PID_MIN_OUT = LIMELIGHT_PID_MAX_OUT * -1;
-  public static final double LIMELIGHT_PID_X_DEADBAND = 2;
-  public static final double LIMELIGHT_PID_Y_DEADBAND = 3;
+  public static final double LIMELIGHT_PID_X_DEADBAND = 0.5;
+  public static final double LIMELIGHT_PID_Y_DEADBAND = 1;
   public static enum LIMELIGHT_LIGHT_MODE {
     PIPELINE_VALUE, OFF, BLINK, ON
   }

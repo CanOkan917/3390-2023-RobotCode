@@ -133,11 +133,22 @@ public class DriveSubsystem extends SubsystemBase {
     }
   }
 
+  public void driveStraight(double fwd, double rot) {
+    if (navX.getAngle() > 0) {
+      rot -= 0.3;
+    } else if (navX.getAngle() < 0) {
+      rot += 0.3;
+    }
+    arcadeDrivePercent(fwd, rot);
+  }
+
   public void lockTarget() {
     if (limelight.isTarget() && !limelight.atSetpoint()) {
       double xSpeed = -limelight.getXOutput();
       double ySpeed = -limelight.getYOutput();
-      arcadeDrivePercent(ySpeed, xSpeed);
+      SmartDashboard.putNumber("X", xSpeed);
+      SmartDashboard.putNumber("Y", ySpeed);
+      arcadeDrivePercent(ySpeed, xSpeed / 1.5);
     }
   }
 }
