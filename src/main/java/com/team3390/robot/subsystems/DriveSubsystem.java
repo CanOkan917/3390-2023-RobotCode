@@ -66,11 +66,16 @@ public class DriveSubsystem extends SubsystemBase {
   public void periodic() {
     shuffleboard.robotBalancedEntry.setBoolean(isBalanced());
     shuffleboard.robotLowPowerModeEntry.setBoolean(LowPowerMode.INSTANCE.getLowDriveModeEnabled());
-    SmartDashboard.putNumber("nivix", getRobotRoll());
+    SmartDashboard.putNumber("Roll", getRobotRoll());
+    SmartDashboard.putNumber("Heading", getHeading());
   }
 
   public double getRobotRoll() {
     return Math.floor(navX.getRoll()) + Constants.DRIVE_NAVX_ROLL_DEADBAND;
+  }
+
+  public double getHeading() {
+    return Math.floor(navX.getAngle());
   }
 
   public boolean isBalanced() {

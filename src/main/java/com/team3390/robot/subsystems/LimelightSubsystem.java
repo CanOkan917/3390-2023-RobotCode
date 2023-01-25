@@ -154,6 +154,14 @@ public class LimelightSubsystem extends SubsystemBase {
   }
 
   /**
+   * Pipelineı değiştirir (0-9)
+   * @param number Pipeline ID
+   */
+  public CommandBase setPipelineCommand(int number) {
+    return runOnce(() -> getValue("pipeline").setNumber(number));
+  }
+
+  /**
    * Eğer crosshair hedefin ortasına geldiyse true olarak döndürüyor.
    * Tolerance değerine göre değişir bu kısım
    * @return hedef noktada ise true, değilse false

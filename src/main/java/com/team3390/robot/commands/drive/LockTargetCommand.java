@@ -1,5 +1,6 @@
 package com.team3390.robot.commands.drive;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import com.team3390.robot.Constants.LIMELIGHT_CAMERA_MODE;
@@ -19,8 +20,10 @@ public class LockTargetCommand extends CommandBase {
 
   @Override
   public void initialize() {
+    limelight.setPipeline(0);
     limelight.setCamMode(LIMELIGHT_CAMERA_MODE.VISION);
     limelight.setLedMode(LIMELIGHT_LIGHT_MODE.ON);
+    Timer.delay(0.3);
   }
 
   @Override
