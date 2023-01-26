@@ -1,5 +1,7 @@
 package com.team3390.robot.utility;
 
+import com.team3390.robot.Constants;
+
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -30,7 +32,9 @@ public class CompetitionShuffleboard {
 
   public CompetitionShuffleboard() {
     tab = Shuffleboard.getTab("Control Panel");
-    Shuffleboard.selectTab("Control Panel");
+    if (Constants.ROBOT_FIELD_MODE) {
+      Shuffleboard.selectTab("Control Panel");
+    }
 
     robotBalancedEntry = tab.add("Balanced", false).getEntry();
     robotLowPowerModeEntry = tab.add("LP Enabled", false).getEntry();

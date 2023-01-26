@@ -66,7 +66,7 @@ public class LimelightSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (Constants.ROBOT_FIELD_MODE) {
+    if (!Constants.ROBOT_FIELD_MODE) {
       shuffleBoard.tab.add("LM-X-Output", getXOutput());
       shuffleBoard.tab.add("LM-X-Output", getYOutput());
 
