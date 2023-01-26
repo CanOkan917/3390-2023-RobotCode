@@ -1,10 +1,8 @@
 package com.team3390.robot.subsystems;
 
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.team3390.robot.utility.PID;
@@ -14,18 +12,13 @@ import com.team3390.robot.utility.CompetitionShuffleboard;
 public class LimelightSubsystem extends SubsystemBase {
 
   private final NetworkTable networkTable;
-  private final ShuffleboardTab shuffleBoard = CompetitionShuffleboard.INSTANCE.tab;
+  private final CompetitionShuffleboard shuffleBoard = CompetitionShuffleboard.getInstance();
 
   private final NetworkTableEntry tX; // Derece cinsinden dikey
   private final NetworkTableEntry tY; // Derece cinsinden yatay
   private final NetworkTableEntry tV; // Herhangi bir hedef var mı? (0, 1)
   private final NetworkTableEntry tA; // Hedefin kamerada ne kadar alan kapladığı
   private final NetworkTableEntry tL; // Limelight pipeline ping
-
-  private final GenericEntry xAtSetpointEntry;
-  private final GenericEntry yAtSetpointEntry;
-  private final GenericEntry atSetpointEntry;
-  private final GenericEntry isTargetEntry;
 
   private final PID xPID;
   private final PID yPID;
@@ -49,11 +42,6 @@ public class LimelightSubsystem extends SubsystemBase {
     tV = networkTable.getEntry("tv");
     tA = networkTable.getEntry("ta");
     tL = networkTable.getEntry("tl");
-
-    xAtSetpointEntry = shuffleBoard.add("LM-X-AtSetpoint", false).getEntry();
-    yAtSetpointEntry = shuffleBoard.add("LM-Y-AtSetpoint", false).getEntry();
-    atSetpointEntry = shuffleBoard.add("LM-AtSetpoint", false).getEntry();
-    isTargetEntry = shuffleBoard.add("LM-IsTarget", false).getEntry();
 
     xPID = new PID(
       Constants.LIMELIGHT_PID_KP,
@@ -79,20 +67,21 @@ public class LimelightSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     if (Constants.ROBOT_FIELD_MODE) {
-      shuffleBoard.add("LM-X-Output", getXOutput());
-      shuffleBoard.add("LM-X-Output", getYOutput());
+      shuffleBoard.tab.add("LM-X-Output", getXOutput());
+      shuffleBoard.tab.add("LM-X-Output", getYOutput());
 
-      shuffleBoard.add("LM-X", tX.getDouble(0));
-      shuffleBoard.add("LM-Y", tY.getDouble(0));
+      shuffleBoard.tab.add("LM-X", tX.getDouble(0));
+      shuffleBoard.tab.add("LM-Y", tY.getDouble(0));
 
-      shuffleBoard.add("LM-Target-Area", tA.getDouble(0));
-      shuffleBoard.add("LM-Pipeline-Ping", tL.getDouble(0));
+      shuffleBoard.tab.add("LM-Target-Area", tA.getDouble(0));
+      shuffleBoard.tab.add("LM-Pipeline-Ping", tL.getDouble(0));
     }
 
-    xAtSetpointEntry.setBoolean(XAtSetpoint());
-    yAtSetpointEntry.setBoolean(YAtSetpoint());
-    atSetpointEntry.setBoolean(atSetpoint());
-    isTargetEntry.setBoolean(isTarget());
+    shuffleBoard.lmXAtSetpointEntry.setBoolean(XAtSetpoint());
+    shuffleBoard.lmYAtSetpointEntry.setBoolean(YAtSetpoint());
+    shuffleBoard.lmAtSetpointEntry.setBoolean(atSetpoint());
+    shuffleBoard.lmIsTargetEntry.setBoolean(isTarget());
+    shuffleBoard.lmVisionModeEntry.setString(getValue("pipeline").getInteger(0) == 0 ? "RETROREFLECTIVE" : getValue("pipeline").getInteger(0) == 1 ? "APRILTAGS" : "CUSTOM");
   }
 
   /**

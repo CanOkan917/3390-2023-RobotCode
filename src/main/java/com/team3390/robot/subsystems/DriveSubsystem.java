@@ -19,7 +19,7 @@ import com.team3390.robot.utility.PID;
 public class DriveSubsystem extends SubsystemBase {
   
   private static DriveSubsystem instance; 
-  private final CompetitionShuffleboard shuffleboard = CompetitionShuffleboard.INSTANCE;
+  private final CompetitionShuffleboard shuffleboard = CompetitionShuffleboard.getInstance();
 
   private boolean isBreakMode = true;
 
