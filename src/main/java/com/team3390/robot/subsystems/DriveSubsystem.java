@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.team3390.lib.drivers.LazyTalonSRX;
 import com.team3390.lib.drivers.TalonSRXCreator;
+import com.team3390.lib.drivers.TalonSRXCreator.Configuration;
 import com.team3390.robot.Constants;
 import com.team3390.robot.Constants.LOWPOWERMODE_INCREASE_TYPE;
 import com.team3390.robot.utility.CompetitionShuffleboard;
@@ -20,8 +21,9 @@ public class DriveSubsystem extends SubsystemBase {
   private static DriveSubsystem instance; 
   private final CompetitionShuffleboard shuffleboard = CompetitionShuffleboard.INSTANCE;
 
-  private boolean isBreakMode;
+  private boolean isBreakMode = true;
 
+  private final Configuration talonConfiguration = new Configuration();
   private final LazyTalonSRX leftMaster, rightMaster, leftSlave, rightSlave;
   private final DifferentialDrive driveController;
 
@@ -45,17 +47,16 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public DriveSubsystem() {    
-    leftMaster = TalonSRXCreator.createDefaultMasterTalon(Constants.DRIVE_LEFT_MASTER_ID);
-    leftSlave = TalonSRXCreator.createDefaultPermanentSlaveTalon(Constants.DRIVE_LEFT_SLAVE_ID, Constants.DRIVE_LEFT_MASTER_ID);
-    rightMaster = TalonSRXCreator.createDefaultMasterTalon(Constants.DRIVE_RIGHT_MASTER_ID);
-    rightSlave = TalonSRXCreator.createDefaultPermanentSlaveTalon(Constants.DRIVE_RIGHT_SLAVE_ID, Constants.DRIVE_RIGHT_MASTER_ID);
+    talonConfiguration.NEUTRAL_MODE = isBreakMode ? NeutralMode.Brake : NeutralMode.Coast;
+    leftMaster = TalonSRXCreator.createTalon(Constants.DRIVE_LEFT_MASTER_ID, talonConfiguration);
+    leftSlave = TalonSRXCreator.createCustomPermanentSlaveTalon(Constants.DRIVE_LEFT_SLAVE_ID, Constants.DRIVE_LEFT_MASTER_ID, talonConfiguration);
+    rightMaster = TalonSRXCreator.createTalon(Constants.DRIVE_RIGHT_MASTER_ID, talonConfiguration);
+    rightSlave = TalonSRXCreator.createCustomPermanentSlaveTalon(Constants.DRIVE_RIGHT_SLAVE_ID, Constants.DRIVE_RIGHT_MASTER_ID, talonConfiguration);
 
     leftMaster.setInverted(Constants.DRIVE_LEFT_INVERTED);
     leftSlave.setInverted(Constants.DRIVE_LEFT_INVERTED);
     rightMaster.setInverted(Constants.DRIVE_RIGHT_INVERTED);
     rightSlave.setInverted(Constants.DRIVE_RIGHT_INVERTED);
-
-    isBreakMode = false;
 
     driveController = new DifferentialDrive(leftMaster, rightMaster);
 

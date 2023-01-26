@@ -9,13 +9,15 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class DriveUntilCustomNavXRoll extends CommandBase {
 
   private final DriveSubsystem driveSubsystem;
-  private final Supplier<Integer> targetRoll;
+  private final int targetRoll;
+  private final boolean abs;
   private final Supplier<Double> fwd;
   private final Supplier<Double> rot;
 
-  public DriveUntilCustomNavXRoll(DriveSubsystem driveSubsystem, Supplier<Integer> targetRoll, Supplier<Double> fwd, Supplier<Double> rot) {
+  public DriveUntilCustomNavXRoll(DriveSubsystem driveSubsystem, int targetRoll, boolean abs, Supplier<Double> fwd, Supplier<Double> rot) {
     this.driveSubsystem = driveSubsystem;
     this.targetRoll = targetRoll;
+    this.abs = abs;
     this.fwd = fwd;
     this.rot = rot;
     addRequirements(this.driveSubsystem);
@@ -34,6 +36,9 @@ public class DriveUntilCustomNavXRoll extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return driveSubsystem.getRobotRoll() >= targetRoll.get();
+    if (abs) {
+      return Math.abs(driveSubsystem.getRobotRoll()) >= targetRoll;
+    }
+    return driveSubsystem.getRobotRoll() >= targetRoll;
   }
 }

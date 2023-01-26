@@ -8,19 +8,19 @@ import com.team3390.robot.Constants.LIMELIGHT_LIGHT_MODE;
 import com.team3390.robot.subsystems.DriveSubsystem;
 import com.team3390.robot.subsystems.LimelightSubsystem;
 
-public class LockTargetCommand extends CommandBase {
+public class LockAprilTags extends CommandBase {
   
   private final DriveSubsystem driveSubsystem;
   private final LimelightSubsystem limelight = LimelightSubsystem.getInstance();
 
-  public LockTargetCommand(DriveSubsystem driveSubsystem) {
+  public LockAprilTags(DriveSubsystem driveSubsystem) {
     this.driveSubsystem = driveSubsystem;
     addRequirements(driveSubsystem);
   }
 
   @Override
   public void initialize() {
-    limelight.setPipeline(0);
+    limelight.setPipeline(1);
     limelight.setCamMode(LIMELIGHT_CAMERA_MODE.VISION);
     limelight.setLedMode(LIMELIGHT_LIGHT_MODE.ON);
     Timer.delay(0.3);

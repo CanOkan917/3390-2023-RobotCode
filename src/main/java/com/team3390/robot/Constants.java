@@ -24,6 +24,7 @@ public final class Constants {
   public static final double DRIVE_BALANCE_PID_TOLERANCE = 2;
   public static final double DRIVE_BALANCE_PID_MAXOUT = 0.7;
   public static final double DRIVE_BALANCE_PID_MINOUT = DRIVE_BALANCE_PID_MAXOUT * -1;
+  public static final int DRIVE_DETECT_ROLL = 10;
 
   public static final int ELEVATOR_BODY_MASTER_PORT = 12;
   public static final int ELEVATOR_BODY_SLAVE_PORT = 13;
@@ -36,12 +37,12 @@ public final class Constants {
   }
 
   public static final double LIMELIGHT_PID_KP = 0.19;
-  public static final double LIMELIGHT_PID_KI = 0.05;
+  public static final double LIMELIGHT_PID_KI = 0.025;
   public static final double LIMELIGHT_PID_KD = 0.005;
   public static final double LIMELIGHT_PID_TOLERANCE = 0;
-  public static final double LIMELIGHT_PID_MAX_OUT = 0.65;
+  public static final double LIMELIGHT_PID_MAX_OUT = 0.5;
   public static final double LIMELIGHT_PID_MIN_OUT = LIMELIGHT_PID_MAX_OUT * -1;
-  public static final double LIMELIGHT_PID_X_DEADBAND = 1.5;
+  public static final double LIMELIGHT_PID_X_DEADBAND = 2;
   public static final double LIMELIGHT_PID_Y_DEADBAND = 2;
   public static enum LIMELIGHT_LIGHT_MODE {
     PIPELINE_VALUE, OFF, BLINK, ON

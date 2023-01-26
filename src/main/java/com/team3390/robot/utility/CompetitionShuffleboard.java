@@ -18,6 +18,7 @@ public class CompetitionShuffleboard {
     Shuffleboard.selectTab("Control Panel");
 
     robotBalancedEntry = tab.add("Balanced", false).getEntry();
-    robotLowPowerModeEntry = tab.add("LowPowerMode-DriveMotors Enabled", false).getEntry();  }
+    robotLowPowerModeEntry = tab.add("LP Enabled", false).getEntry();
+  }
 
 }
