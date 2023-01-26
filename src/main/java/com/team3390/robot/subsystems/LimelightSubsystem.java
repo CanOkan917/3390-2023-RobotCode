@@ -6,6 +6,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.team3390.robot.utility.PID;
+import com.team3390.robot.utility.TunableNumber;
 import com.team3390.robot.Constants;
 import com.team3390.robot.utility.CompetitionShuffleboard;
 
@@ -19,6 +20,12 @@ public class LimelightSubsystem extends SubsystemBase {
   private final NetworkTableEntry tV; // Herhangi bir hedef var mı? (0, 1)
   private final NetworkTableEntry tA; // Hedefin kamerada ne kadar alan kapladığı
   private final NetworkTableEntry tL; // Limelight pipeline ping
+
+  private final TunableNumber kP = new TunableNumber("Limelight/kP", Constants.LIMELIGHT_PID_KP);
+  private final TunableNumber kI = new TunableNumber("Limelight/kI", Constants.LIMELIGHT_PID_KI);
+  private final TunableNumber kD = new TunableNumber("Limelight/kD", Constants.LIMELIGHT_PID_KD);
+  private final TunableNumber xTolerance = new TunableNumber("Limelight/xTolerance", Constants.LIMELIGHT_PID_X_TOLERANCE);
+  private final TunableNumber yTolerance = new TunableNumber("Limelight/yTolerance", Constants.LIMELIGHT_PID_Y_TOLERANCE);
 
   private final PID xPID;
   private final PID yPID;
@@ -44,17 +51,13 @@ public class LimelightSubsystem extends SubsystemBase {
     tL = networkTable.getEntry("tl");
 
     xPID = new PID(
-      Constants.LIMELIGHT_PID_KP,
-      Constants.LIMELIGHT_PID_KI,
-      Constants.LIMELIGHT_PID_KD,
+      kP.get(), kI.get(), kD.get(),
       Constants.LIMELIGHT_PID_TOLERANCE,
       Constants.LIMELIGHT_PID_MAX_OUT,
       Constants.LIMELIGHT_PID_MIN_OUT
     );
     yPID = new PID(
-      Constants.LIMELIGHT_PID_KP,
-      Constants.LIMELIGHT_PID_KI,
-      Constants.LIMELIGHT_PID_KD,
+      kP.get(), kI.get(), kD.get(),
       Constants.LIMELIGHT_PID_TOLERANCE,
       Constants.LIMELIGHT_PID_MAX_OUT,
       Constants.LIMELIGHT_PID_MIN_OUT
@@ -160,11 +163,11 @@ public class LimelightSubsystem extends SubsystemBase {
   }
 
   public boolean XAtSetpoint() {
-    return Math.abs(tX.getDouble(0)) <= Constants.LIMELIGHT_PID_X_DEADBAND;
+    return Math.abs(tX.getDouble(0)) <= xTolerance.get();
   }
 
   public boolean YAtSetpoint() {
-    return Math.abs(tY.getDouble(0)) <= Constants.LIMELIGHT_PID_Y_DEADBAND;
+    return Math.abs(tY.getDouble(0)) <= yTolerance.get();
   }
 
   /**

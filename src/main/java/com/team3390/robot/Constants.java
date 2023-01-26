@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.I2C.Port;
 
 public final class Constants {
   public static final boolean ROBOT_FIELD_MODE = DriverStation.isFMSAttached();
+  public static final boolean TUNING_MODE = false;
 
   public static final int JOYSTICK_LEFT_PORT = 0;
   public static final int JOYSTICK_RIGHT_PORT = 1;
@@ -42,8 +43,8 @@ public final class Constants {
   public static final double LIMELIGHT_PID_TOLERANCE = 0;
   public static final double LIMELIGHT_PID_MAX_OUT = 0.5;
   public static final double LIMELIGHT_PID_MIN_OUT = LIMELIGHT_PID_MAX_OUT * -1;
-  public static final double LIMELIGHT_PID_X_DEADBAND = 2;
-  public static final double LIMELIGHT_PID_Y_DEADBAND = 2;
+  public static final double LIMELIGHT_PID_X_TOLERANCE = 2;
+  public static final double LIMELIGHT_PID_Y_TOLERANCE = 2;
   public static enum LIMELIGHT_LIGHT_MODE {
     PIPELINE_VALUE, OFF, BLINK, ON
   }
