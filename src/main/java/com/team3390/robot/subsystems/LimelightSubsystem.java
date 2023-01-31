@@ -3,6 +3,7 @@ package com.team3390.robot.subsystems;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.team3390.robot.utility.PID;
@@ -62,11 +63,10 @@ public class LimelightSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    shuffleBoard.lmXAtSetpointEntry.setBoolean(XAtSetpoint());
-    shuffleBoard.lmYAtSetpointEntry.setBoolean(YAtSetpoint());
-    shuffleBoard.lmAtSetpointEntry.setBoolean(atSetpoint());
+    shuffleBoard.lmXAtSetpointEntry.setBoolean(XAtSetpoint_APRIL() || XAtSetpoint_RETRO());
+    shuffleBoard.lmYAtSetpointEntry.setBoolean(YAtSetpoint_APRIL() || YAtSetpoint_RETRO());
+    shuffleBoard.lmAtSetpointEntry.setBoolean(atSetpoint_APRIL() || atSetpoint_RETRO());
     shuffleBoard.lmIsTargetEntry.setBoolean(isTarget());
-    shuffleBoard.lmVisionModeEntry.setString(getValue("pipeline").getInteger(0) == 0 ? "RETROREFLECTIVE" : getValue("pipeline").getInteger(0) == 1 ? "APRILTAGS" : "CUSTOM");
   }
 
   /**
@@ -140,16 +140,33 @@ public class LimelightSubsystem extends SubsystemBase {
    * Tolerance değerine göre değişir bu kısım
    * @return hedef noktada ise true, değilse false
    */
-  public boolean atSetpoint() {
-    return XAtSetpoint() && YAtSetpoint();
+  public boolean atSetpoint_RETRO() {
+    return XAtSetpoint_RETRO() && YAtSetpoint_RETRO();
   }
 
-  public boolean XAtSetpoint() {
-    return Math.abs(tX.getDouble(0)) <= Constants.LIMELIGHT_PID_X_TOLERANCE;
+  public boolean XAtSetpoint_RETRO() {
+    return Math.abs(tX.getDouble(0)) <= Constants.LIMELIGHT_PID_X_RETRO_TOLERANCE;
   }
 
-  public boolean YAtSetpoint() {
-    return Math.abs(tY.getDouble(0)) <= Constants.LIMELIGHT_PID_Y_TOLERANCE;
+  public boolean YAtSetpoint_RETRO() {
+    return Math.abs(tY.getDouble(0)) <= Constants.LIMELIGHT_PID_Y_RETRO_TOLERANCE;
+  }
+
+  /**
+   * Eğer crosshair hedefin ortasına geldiyse true olarak döndürüyor.
+   * Tolerance değerine göre değişir bu kısım
+   * @return hedef noktada ise true, değilse false
+   */
+  public boolean atSetpoint_APRIL() {
+    return XAtSetpoint_APRIL() && YAtSetpoint_APRIL();
+  }
+
+  public boolean XAtSetpoint_APRIL() {
+    return Math.abs(tX.getDouble(0)) <= Constants.LIMELIGHT_PID_X_APRIL_TOLERANCE;
+  }
+
+  public boolean YAtSetpoint_APRIL() {
+    return Math.abs(tY.getDouble(0)) <= Constants.LIMELIGHT_PID_Y_APRIL_TOLERANCE;
   }
 
   /**

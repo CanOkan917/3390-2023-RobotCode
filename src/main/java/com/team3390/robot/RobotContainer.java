@@ -7,9 +7,11 @@ package com.team3390.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import com.team3390.robot.Constants.LIMELIGHT_LIGHT_MODE;
+import com.team3390.robot.commands.autonomous.DriveForward;
 import com.team3390.robot.commands.autonomous.Pos4;
 import com.team3390.robot.commands.drive.BalanceRobotCommand;
 import com.team3390.robot.commands.drive.LockAprilTags;
@@ -36,14 +38,21 @@ public class RobotContainer {
   private final ResetSensorsCommand resetSensorsCommand = new ResetSensorsCommand(driveSubsystem);
   private final LockRetroreflective lockRetroreflectiveCommand = new LockRetroreflective(driveSubsystem);
   private final LockAprilTags lockAprilTagsCommand = new LockAprilTags(driveSubsystem);
+
+  private final Command setLimelightForRetroreflectiveTape = new InstantCommand(() -> {
+    limelightSubsystem.setLedMode(LIMELIGHT_LIGHT_MODE.ON);
+    limelightSubsystem.setPipeline(0);
+  });
+  private final Command setLimelightForAprilTags = new InstantCommand(() -> {
+    limelightSubsystem.setLedMode(LIMELIGHT_LIGHT_MODE.PIPELINE_VALUE);
+    limelightSubsystem.setPipeline(1);
+  });
   
   public RobotContainer() {
-    new Trigger(() -> rightStick.getRawButton(4)).onTrue(limelightSubsystem.setLedModeCommand(LIMELIGHT_LIGHT_MODE.OFF));
-    new Trigger(() -> rightStick.getRawButton(5)).onTrue(limelightSubsystem.setLedModeCommand(LIMELIGHT_LIGHT_MODE.ON));
+    new Trigger(() -> rightStick.getRawButton(4)).onTrue(setLimelightForRetroreflectiveTape);
+    new Trigger(() -> rightStick.getRawButton(5)).onTrue(setLimelightForAprilTags);
     new Trigger(() -> rightStick.getRawButton(2)).onTrue(lowPowerMode.toggleLowDriveModeCommand());
 
-    new Trigger(() -> leftStick.getRawButton(4)).onTrue(limelightSubsystem.setPipelineCommand(0));
-    new Trigger(() -> leftStick.getRawButton(5)).onTrue(limelightSubsystem.setPipelineCommand(1));
     new Trigger(() -> leftStick.getRawButton(6)).onTrue(resetSensorsCommand);
     
     new Trigger(() -> atari1.getRawButton(1)).whileTrue(lockRetroreflectiveCommand);
@@ -60,6 +69,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return new Pos4(driveSubsystem, true, true);
+    return new Pos4(driveSubsystem, true, false);
   }
 }

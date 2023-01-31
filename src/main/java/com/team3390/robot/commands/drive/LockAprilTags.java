@@ -28,7 +28,7 @@ public class LockAprilTags extends CommandBase {
 
   @Override
   public void execute() {
-    driveSubsystem.lockTarget();
+    driveSubsystem.LockAprilTags();
   }
 
   @Override
@@ -38,6 +38,6 @@ public class LockAprilTags extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return limelight.atSetpoint();
+    return limelight.atSetpoint_APRIL();
   }
 }

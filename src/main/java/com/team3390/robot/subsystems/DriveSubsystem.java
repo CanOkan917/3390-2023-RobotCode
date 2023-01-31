@@ -148,8 +148,17 @@ public class DriveSubsystem extends SubsystemBase {
     arcadeDrivePercent(fwd, rot);
   }
 
-  public void lockTarget() {
-    if (limelight.isTarget() && !limelight.atSetpoint()) {
+  public void LockRetroreflective() {
+    if (limelight.isTarget() && !limelight.atSetpoint_RETRO()) {
+      double xSpeed = -limelight.getXOutput();
+      double ySpeed = -limelight.getYOutput();
+      SmartDashboard.putNumber("X", xSpeed);
+      SmartDashboard.putNumber("Y", ySpeed);
+      arcadeDrivePercent(ySpeed, xSpeed / 2);
+    }
+  }
+  public void LockAprilTags() {
+    if (limelight.isTarget() && !limelight.atSetpoint_APRIL()) {
       double xSpeed = -limelight.getXOutput();
       double ySpeed = -limelight.getYOutput();
       SmartDashboard.putNumber("X", xSpeed);

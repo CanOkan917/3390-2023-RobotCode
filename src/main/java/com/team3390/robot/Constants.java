@@ -18,7 +18,7 @@ public final class Constants {
   public static final int DRIVE_RIGHT_SLAVE_ID = 1;
   public static final boolean DRIVE_LEFT_INVERTED = true;
   public static final boolean DRIVE_RIGHT_INVERTED = false;
-  public static final int DRIVE_NAVX_ROLL_DEADBAND = 5;
+  public static final int DRIVE_NAVX_ROLL_DEADBAND = 2;
   public static final double DRIVE_BALANCE_PID_KP = 0.1;
   public static final double DRIVE_BALANCE_PID_KI = 0;
   public static final double DRIVE_BALANCE_PID_KD = 0;
@@ -38,13 +38,15 @@ public final class Constants {
   }
 
   public static final double LIMELIGHT_PID_KP = 0.19;
-  public static final double LIMELIGHT_PID_KI = 0.025;
-  public static final double LIMELIGHT_PID_KD = 0.005;
+  public static final double LIMELIGHT_PID_KI = 0.01;
+  public static final double LIMELIGHT_PID_KD = 0.001;
   public static final double LIMELIGHT_PID_TOLERANCE = 0;
-  public static final double LIMELIGHT_PID_MAX_OUT = 0.5;
+  public static final double LIMELIGHT_PID_MAX_OUT = 0.7;
   public static final double LIMELIGHT_PID_MIN_OUT = LIMELIGHT_PID_MAX_OUT * -1;
-  public static final double LIMELIGHT_PID_X_TOLERANCE = 2;
-  public static final double LIMELIGHT_PID_Y_TOLERANCE = 2;
+  public static final double LIMELIGHT_PID_X_RETRO_TOLERANCE = 0.75;
+  public static final double LIMELIGHT_PID_Y_RETRO_TOLERANCE = 1.5;
+  public static final double LIMELIGHT_PID_X_APRIL_TOLERANCE = 1;
+  public static final double LIMELIGHT_PID_Y_APRIL_TOLERANCE = 0.2;
   public static enum LIMELIGHT_LIGHT_MODE {
     PIPELINE_VALUE, OFF, BLINK, ON
   }

@@ -28,7 +28,7 @@ public class LockRetroreflective extends CommandBase {
 
   @Override
   public void execute() {
-    driveSubsystem.lockTarget();
+    driveSubsystem.LockRetroreflective();
   }
 
   @Override
@@ -38,6 +38,6 @@ public class LockRetroreflective extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return limelight.atSetpoint();
+    return limelight.atSetpoint_RETRO();
   }
 }

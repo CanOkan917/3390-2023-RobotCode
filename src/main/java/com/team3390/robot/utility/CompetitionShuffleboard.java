@@ -21,7 +21,6 @@ public class CompetitionShuffleboard {
   public final GenericEntry lmYAtSetpointEntry;
   public final GenericEntry lmAtSetpointEntry;
   public final GenericEntry lmIsTargetEntry;
-  public final GenericEntry lmVisionModeEntry;
 
   public static synchronized CompetitionShuffleboard getInstance() {
     if (instance == null) {
@@ -42,7 +41,6 @@ public class CompetitionShuffleboard {
     lmYAtSetpointEntry = tab.add("LM-Y-AtSetpoint", false).getEntry();
     lmAtSetpointEntry = tab.add("LM-AtSetpoint", false).getEntry();
     lmIsTargetEntry = tab.add("LM-IsTarget", false).getEntry();
-    lmVisionModeEntry = tab.add("LM-VisionMode", "RETROREFLECTIVE").getEntry();
   }
 
 }

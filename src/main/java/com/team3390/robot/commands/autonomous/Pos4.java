@@ -16,9 +16,9 @@ public class Pos4 extends SequentialCommandGroup {
     if (balance) {
       addCommands(
         new ResetSensorsCommand(driveSubsystem),
-        new LockRetroreflective(driveSubsystem),
+        // new LockRetroreflective(driveSubsystem),
         new WaitCommand(0.5),
-        new DriveUntilCustomNavXRoll(driveSubsystem, Constants.DRIVE_DETECT_ROLL, false, () -> 0.8, () -> 0.0),
+        new DriveUntilCustomNavXRoll(driveSubsystem, Constants.DRIVE_DETECT_ROLL, false, () -> 0.9, () -> 0.0),
         new BalanceRobotCommand(driveSubsystem, false),
         new RotateToAngle(driveSubsystem, () -> 0),
         new BalanceRobotCommand(driveSubsystem, always)
