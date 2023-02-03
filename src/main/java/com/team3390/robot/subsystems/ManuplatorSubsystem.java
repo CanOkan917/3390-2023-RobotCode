@@ -87,7 +87,10 @@ public class ManuplatorSubsystem extends SubsystemBase {
   }
 
   public void body(double speed) {
-    bodyMaster.set(speed);
+    if (topSwitch.get() || bottomSwtich.get())
+      bodyMaster.set(0);
+    else
+      bodyMaster.set(speed);
   }
 
   public void hand(double speed) {
