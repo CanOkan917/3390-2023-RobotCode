@@ -16,9 +16,11 @@ import com.team3390.robot.commands.drive.BalanceRobotCommand;
 import com.team3390.robot.commands.drive.LockAprilTags;
 import com.team3390.robot.commands.drive.LockRetroreflective;
 import com.team3390.robot.commands.drive.TankDriveCommand;
+import com.team3390.robot.commands.manuplators.ManuplatorMasterControl;
 import com.team3390.robot.commands.utility.ResetSensorsCommand;
 import com.team3390.robot.subsystems.DriveSubsystem;
 import com.team3390.robot.subsystems.LimelightSubsystem;
+import com.team3390.robot.subsystems.ManuplatorSubsystem;
 import com.team3390.robot.utility.LowPowerMode;
 
 public class RobotContainer {
@@ -27,11 +29,13 @@ public class RobotContainer {
 
   private final DriveSubsystem driveSubsystem = DriveSubsystem.getInstance();
   private final LimelightSubsystem limelightSubsystem = LimelightSubsystem.getInstance();
+  private final ManuplatorSubsystem manuplatorSubsystem = ManuplatorSubsystem.getInstance();
 
   private final Joystick leftStick = new Joystick(Constants.JOYSTICK_LEFT_PORT);
   private final Joystick rightStick = new Joystick(Constants.JOYSTICK_RIGHT_PORT);
   private final Joystick atari1 = new Joystick(Constants.JOYSTICK_ATARI1_PORT);
   // private final Joystick atari2 = new Joystick(Constants.JOYSTICK_ATARI2_PORT);
+  private final Joystick gamepad = new Joystick(Constants.JOYSTICK_GAMEPAD_PORT);
 
   private final BalanceRobotCommand balanceRobotCommand = new BalanceRobotCommand(driveSubsystem, true);
   private final ResetSensorsCommand resetSensorsCommand = new ResetSensorsCommand(driveSubsystem);
@@ -65,6 +69,13 @@ public class RobotContainer {
       () -> leftStick.getY(),
       () -> rightStick.getY()
     ));
+    manuplatorSubsystem.setDefaultCommand(
+      new ManuplatorMasterControl(
+        manuplatorSubsystem,
+        () -> gamepad.getRawAxis(2),
+        () -> gamepad.getRawAxis(4)
+      )
+    );
   }
 
   public Command getAutonomousCommand() {

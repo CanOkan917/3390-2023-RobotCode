@@ -16,6 +16,10 @@ public class CompetitionShuffleboard {
   public final GenericEntry robotBalancedEntry;
   public final GenericEntry robotLowPowerModeEntry;
 
+  // ElevatorSubsystem
+  public final GenericEntry eTopSwitchEnabledEntry;
+  public final GenericEntry eBottomSwitchEnabledEntry;
+
   // LimelightSubsystem
   public final GenericEntry lmXAtSetpointEntry;
   public final GenericEntry lmYAtSetpointEntry;
@@ -37,6 +41,8 @@ public class CompetitionShuffleboard {
 
     robotBalancedEntry = tab.add("Balanced", false).getEntry();
     robotLowPowerModeEntry = tab.add("LP Enabled", false).getEntry();
+    eTopSwitchEnabledEntry = tab.add("Top Switch", false).getEntry();
+    eBottomSwitchEnabledEntry = tab.add("Down Switch", false).getEntry();
     lmXAtSetpointEntry = tab.add("LM-X-AtSetpoint", false).getEntry();
     lmYAtSetpointEntry = tab.add("LM-Y-AtSetpoint", false).getEntry();
     lmAtSetpointEntry = tab.add("LM-AtSetpoint", false).getEntry();
