@@ -6,12 +6,15 @@
 package com.team3390.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import com.team3390.robot.Constants.LIMELIGHT_LIGHT_MODE;
-import com.team3390.robot.commands.autonomous.Pos4;
+import com.team3390.robot.commands.autonomous.Cone;
+import com.team3390.robot.commands.autonomous.Cube;
 import com.team3390.robot.commands.drive.BalanceRobotCommand;
 import com.team3390.robot.commands.drive.LockAprilTags;
 import com.team3390.robot.commands.drive.LockRetroreflective;
@@ -33,8 +36,6 @@ public class RobotContainer {
 
   private final Joystick leftStick = new Joystick(Constants.JOYSTICK_LEFT_PORT);
   private final Joystick rightStick = new Joystick(Constants.JOYSTICK_RIGHT_PORT);
-  private final Joystick atari1 = new Joystick(Constants.JOYSTICK_ATARI1_PORT);
-  // private final Joystick atari2 = new Joystick(Constants.JOYSTICK_ATARI2_PORT);
   private final Joystick gamepad = new Joystick(Constants.JOYSTICK_GAMEPAD_PORT);
 
   private final BalanceRobotCommand balanceRobotCommand = new BalanceRobotCommand(driveSubsystem, true);
@@ -50,6 +51,11 @@ public class RobotContainer {
     limelightSubsystem.setLedMode(LIMELIGHT_LIGHT_MODE.PIPELINE_VALUE);
     limelightSubsystem.setPipeline(1);
   });
+
+  private final SendableChooser<Integer> autoChooser = new SendableChooser<>();
+  private final SendableChooser<Boolean> balanceChooser = new SendableChooser<>();
+  private final SendableChooser<Boolean> alwaysBalanceChooser = new SendableChooser<>();
+  private Command sellectedAuto;
   
   public RobotContainer() {
     new Trigger(() -> rightStick.getRawButton(4)).onTrue(setLimelightForRetroreflectiveTape);
@@ -58,9 +64,9 @@ public class RobotContainer {
 
     new Trigger(() -> leftStick.getRawButton(6)).onTrue(resetSensorsCommand);
     
-    new Trigger(() -> atari1.getRawButton(1)).whileTrue(lockRetroreflectiveCommand);
-    new Trigger(() -> atari1.getRawButton(2)).whileTrue(lockAprilTagsCommand);
-    new Trigger(() -> atari1.getRawButton(3)).whileTrue(balanceRobotCommand);
+    new Trigger(() -> gamepad.getRawButton(1)).whileTrue(lockRetroreflectiveCommand);
+    new Trigger(() -> gamepad.getRawButton(2)).whileTrue(lockAprilTagsCommand);
+    new Trigger(() -> gamepad.getRawButton(3)).whileTrue(balanceRobotCommand);
 
     driveSubsystem.resetSensors();
 
@@ -76,9 +82,40 @@ public class RobotContainer {
         () -> gamepad.getRawAxis(4)
       )
     );
+
+    autoChooser.addOption("Pos 1 (Cone)", 1);
+    autoChooser.addOption("Pos 2 (Cube)", 2);
+    autoChooser.addOption("Pos 3 (Cone)", 3);
+    autoChooser.addOption("Pos 4 (Cone)", 4);
+    autoChooser.setDefaultOption("Pos 5 (Cube)", 5);
+    autoChooser.addOption("Pos 6 (Cone)", 6);
+    autoChooser.addOption("Pos 7 (Cone)", 7);
+    autoChooser.addOption("Pos 8 (Cube)", 8);
+    autoChooser.addOption("Pos 9 (Cone)", 9);
+
+    balanceChooser.setDefaultOption("Yes", true);
+    balanceChooser.addOption("No", false);
+
+    alwaysBalanceChooser.setDefaultOption("Yes", true);
+    alwaysBalanceChooser.addOption("No", false);
+
+    SmartDashboard.putData("Auto Mode", autoChooser);
+    SmartDashboard.putData("Balance", balanceChooser);
+    SmartDashboard.putData("Always Balance", alwaysBalanceChooser);
   }
 
   public Command getAutonomousCommand() {
-    return new Pos4(driveSubsystem, true, false);
+    boolean balance = false;
+    int sellected = autoChooser.getSelected();
+
+    if (sellected == 4 || sellected == 5 || sellected == 6)
+      balance = balanceChooser.getSelected();
+
+    if (sellected == 1 || sellected == 3 || sellected == 5 || sellected == 7 || sellected == 9)
+      sellectedAuto = new Cone(driveSubsystem, balance, alwaysBalanceChooser.getSelected());
+    else
+      sellectedAuto = new Cube(driveSubsystem, balance, alwaysBalanceChooser.getSelected());
+
+    return sellectedAuto;
   }
 }

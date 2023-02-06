@@ -9,8 +9,6 @@ public final class Constants {
 
   public static final int JOYSTICK_LEFT_PORT = 0;
   public static final int JOYSTICK_RIGHT_PORT = 1;
-  public static final int JOYSTICK_ATARI1_PORT = 3;
-  public static final int JOYSTICK_ATARI2_PORT = 2;
   public static final int JOYSTICK_GAMEPAD_PORT = 4;
 
   public static final int DRIVE_LEFT_MASTER_ID = 11;
