@@ -78,8 +78,8 @@ public class RobotContainer {
     manuplatorSubsystem.setDefaultCommand(
       new ManuplatorMasterControl(
         manuplatorSubsystem,
-        () -> gamepad.getRawAxis(2),
-        () -> gamepad.getRawAxis(4)
+        () -> gamepad.getRawAxis(3),
+        () -> gamepad.getRawAxis(1)
       )
     );
 

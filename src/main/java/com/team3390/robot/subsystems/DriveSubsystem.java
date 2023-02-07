@@ -24,7 +24,7 @@ public class DriveSubsystem extends SubsystemBase {
   private boolean isBreakMode = true;
 
   private final Configuration talonConfiguration = new Configuration();
-  private final LazyTalonSRX leftMaster, rightMaster, leftSlave, rightSlave;
+  private final LazyTalonSRX leftMaster, rightMaster, leftSlave1, rightSlave1, leftSlave2, rightSlave2;
   private final DifferentialDrive driveController;
 
   private final AHRS navX = new AHRS(Constants.SENSOR_NAVX_PORT);
@@ -49,14 +49,18 @@ public class DriveSubsystem extends SubsystemBase {
   public DriveSubsystem() {    
     talonConfiguration.NEUTRAL_MODE = isBreakMode ? NeutralMode.Brake : NeutralMode.Coast;
     leftMaster = TalonSRXCreator.createTalon(Constants.DRIVE_LEFT_MASTER_ID, talonConfiguration);
-    leftSlave = TalonSRXCreator.createCustomPermanentSlaveTalon(Constants.DRIVE_LEFT_SLAVE_ID, Constants.DRIVE_LEFT_MASTER_ID, talonConfiguration);
+    leftSlave1 = TalonSRXCreator.createCustomPermanentSlaveTalon(Constants.DRIVE_LEFT_SLAVE1_ID, Constants.DRIVE_LEFT_MASTER_ID, talonConfiguration);
+    leftSlave2 = TalonSRXCreator.createCustomPermanentSlaveTalon(Constants.DRIVE_LEFT_SLAVE2_ID, Constants.DRIVE_LEFT_MASTER_ID, talonConfiguration);
     rightMaster = TalonSRXCreator.createTalon(Constants.DRIVE_RIGHT_MASTER_ID, talonConfiguration);
-    rightSlave = TalonSRXCreator.createCustomPermanentSlaveTalon(Constants.DRIVE_RIGHT_SLAVE_ID, Constants.DRIVE_RIGHT_MASTER_ID, talonConfiguration);
+    rightSlave1 = TalonSRXCreator.createCustomPermanentSlaveTalon(Constants.DRIVE_RIGHT_SLAVE1_ID, Constants.DRIVE_RIGHT_MASTER_ID, talonConfiguration);
+    rightSlave2 = TalonSRXCreator.createCustomPermanentSlaveTalon(Constants.DRIVE_RIGHT_SLAVE2_ID, Constants.DRIVE_RIGHT_MASTER_ID, talonConfiguration);
 
     leftMaster.setInverted(Constants.DRIVE_LEFT_INVERTED);
-    leftSlave.setInverted(Constants.DRIVE_LEFT_INVERTED);
+    leftSlave1.setInverted(Constants.DRIVE_LEFT_INVERTED);
+    leftSlave2.setInverted(Constants.DRIVE_LEFT_INVERTED);
     rightMaster.setInverted(Constants.DRIVE_RIGHT_INVERTED);
-    rightSlave.setInverted(Constants.DRIVE_RIGHT_INVERTED);
+    rightSlave1.setInverted(Constants.DRIVE_RIGHT_INVERTED);
+    rightSlave2.setInverted(Constants.DRIVE_RIGHT_INVERTED);
 
     driveController = new DifferentialDrive(leftMaster, rightMaster);
 
@@ -106,10 +110,12 @@ public class DriveSubsystem extends SubsystemBase {
       NeutralMode mode = shouldEnable ? NeutralMode.Brake : NeutralMode.Coast;
 
       leftMaster.setNeutralMode(mode);
-      leftSlave.setNeutralMode(mode);
+      leftSlave1.setNeutralMode(mode);
+      leftSlave2.setNeutralMode(mode);
 
       rightMaster.setNeutralMode(mode);
-      rightSlave.setNeutralMode(mode);
+      rightSlave1.setNeutralMode(mode);
+      rightSlave2.setNeutralMode(mode);
     }
   }
 

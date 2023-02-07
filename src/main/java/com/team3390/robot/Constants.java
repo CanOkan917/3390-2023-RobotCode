@@ -12,9 +12,11 @@ public final class Constants {
   public static final int JOYSTICK_GAMEPAD_PORT = 4;
 
   public static final int DRIVE_LEFT_MASTER_ID = 11;
-  public static final int DRIVE_LEFT_SLAVE_ID = 10;
+  public static final int DRIVE_LEFT_SLAVE1_ID = 10;
+  public static final int DRIVE_LEFT_SLAVE2_ID = 9;
   public static final int DRIVE_RIGHT_MASTER_ID = 0;
-  public static final int DRIVE_RIGHT_SLAVE_ID = 1;
+  public static final int DRIVE_RIGHT_SLAVE1_ID = 1;
+  public static final int DRIVE_RIGHT_SLAVE2_ID = 2;
   public static final boolean DRIVE_LEFT_INVERTED = true;
   public static final boolean DRIVE_RIGHT_INVERTED = false;
   public static final int DRIVE_NAVX_ROLL_DEADBAND = 2;
@@ -26,11 +28,11 @@ public final class Constants {
   public static final double DRIVE_BALANCE_PID_MINOUT = DRIVE_BALANCE_PID_MAXOUT * -1;
   public static final int DRIVE_DETECT_ROLL = 10;
 
-  public static final int ELEVATOR_BODY_ID = 2;
-  public static final boolean ELEVATOR_BODY_INVERTED = false;
-  public static final int ELEVATOR_HAND_ID = 9;
-  public static final boolean ELEVATOR_HAND_INVERTED = false;
-  public static final int ELEVATOR_INTAKE_ID = 16;
+  public static final int ELEVATOR_BODY_ID = 3;
+  public static final boolean ELEVATOR_BODY_INVERTED = true;
+  public static final int ELEVATOR_HAND_ID = 4;
+  public static final boolean ELEVATOR_HAND_INVERTED = true;
+  public static final int ELEVATOR_INTAKE_ID = 102;
   public static final boolean ELEVATOR_INTAKE_INVERTED = false;
   public static final int ELEVATOR_INTAKE_SOLENOID_PORT = 0;
   public static final int ELEVATOR_TOP_SWITCH_PORT = 0;
