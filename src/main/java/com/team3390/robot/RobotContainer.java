@@ -19,6 +19,7 @@ import com.team3390.robot.commands.drive.BalanceRobotCommand;
 import com.team3390.robot.commands.drive.LockAprilTags;
 import com.team3390.robot.commands.drive.LockRetroreflective;
 import com.team3390.robot.commands.drive.TankDriveCommand;
+import com.team3390.robot.commands.manuplators.BodyUp;
 import com.team3390.robot.commands.manuplators.ManuplatorMasterControl;
 import com.team3390.robot.commands.utility.ResetSensorsCommand;
 import com.team3390.robot.subsystems.DriveSubsystem;
@@ -67,6 +68,8 @@ public class RobotContainer {
     new Trigger(() -> gamepad.getRawButton(1)).whileTrue(lockRetroreflectiveCommand);
     new Trigger(() -> gamepad.getRawButton(2)).whileTrue(lockAprilTagsCommand);
     new Trigger(() -> gamepad.getRawButton(3)).whileTrue(balanceRobotCommand);
+
+    new Trigger(() -> gamepad.getRawButton(4)).onTrue(new BodyUp(manuplatorSubsystem, () -> -1.0, () -> 3.75));
 
     driveSubsystem.resetSensors();
 

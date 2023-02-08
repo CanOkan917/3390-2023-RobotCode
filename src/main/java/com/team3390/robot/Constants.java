@@ -30,10 +30,10 @@ public final class Constants {
 
   public static final int ELEVATOR_BODY_ID = 3;
   public static final boolean ELEVATOR_BODY_INVERTED = true;
-  public static final int ELEVATOR_HAND_ID = 4;
-  public static final boolean ELEVATOR_HAND_INVERTED = true;
-  public static final int ELEVATOR_INTAKE_ID = 102;
-  public static final boolean ELEVATOR_INTAKE_INVERTED = false;
+  public static final int ELEVATOR_ELBOW_ID = 4;
+  public static final boolean ELEVATOR_ELBOW_INVERTED = true;
+  public static final int ELEVATOR_HAND_ID = 102;
+  public static final boolean ELEVATOR_HAND_INVERTED = false;
   public static final int ELEVATOR_INTAKE_SOLENOID_PORT = 0;
   public static final int ELEVATOR_TOP_SWITCH_PORT = 0;
   public static final int ELEVATOR_BOTTOM_SWITCH_PORT = 1;

@@ -17,13 +17,13 @@ public class ManuplatorSubsystem extends SubsystemBase {
   private static ManuplatorSubsystem instance;
   private final CompetitionShuffleboard shuffleboard = CompetitionShuffleboard.getInstance();
 
-  private boolean isBreakMode = true;
+  private boolean isBreakMode = false;
 
-  private final LazyTalonSRX bodyMaster, handMaster, handIntake;
+  private final LazyTalonSRX bodyMaster, elbowMaster, handMaster;
 
   private final Configuration bodyConfiguration = new Configuration();
+  private final Configuration elbowConfiguration = new Configuration();
   private final Configuration handConfiguration = new Configuration();
-  private final Configuration intakeConfiguration = new Configuration();
 
   private final DigitalInput topSwitch, bottomSwtich;
 
@@ -39,13 +39,13 @@ public class ManuplatorSubsystem extends SubsystemBase {
   public ManuplatorSubsystem() {
     bodyConfiguration.NEUTRAL_MODE = isBreakMode ? NeutralMode.Brake : NeutralMode.Coast;
     bodyConfiguration.INVERTED = Constants.ELEVATOR_BODY_INVERTED;
-    handConfiguration.NEUTRAL_MODE = isBreakMode ? NeutralMode.Brake : NeutralMode.Coast;
+    elbowConfiguration.NEUTRAL_MODE = isBreakMode ? NeutralMode.Brake : NeutralMode.Coast;
+    elbowConfiguration.INVERTED = Constants.ELEVATOR_ELBOW_INVERTED;
     handConfiguration.INVERTED = Constants.ELEVATOR_HAND_INVERTED;
-    intakeConfiguration.INVERTED = Constants.ELEVATOR_INTAKE_INVERTED;
 
     bodyMaster = TalonSRXCreator.createTalon(Constants.ELEVATOR_BODY_ID, bodyConfiguration);
+    elbowMaster = TalonSRXCreator.createTalon(Constants.ELEVATOR_ELBOW_ID, elbowConfiguration);
     handMaster = TalonSRXCreator.createTalon(Constants.ELEVATOR_HAND_ID, handConfiguration);
-    handIntake = TalonSRXCreator.createTalon(Constants.ELEVATOR_INTAKE_ID, intakeConfiguration);
 
     topSwitch = new DigitalInput(Constants.ELEVATOR_TOP_SWITCH_PORT);
     bottomSwtich = new DigitalInput(Constants.ELEVATOR_BOTTOM_SWITCH_PORT);
@@ -73,7 +73,7 @@ public class ManuplatorSubsystem extends SubsystemBase {
       isBreakMode = shouldEnable;
       NeutralMode mode = shouldEnable ? NeutralMode.Brake : NeutralMode.Coast;
 
-      handMaster.setNeutralMode(mode);
+      elbowMaster.setNeutralMode(mode);
     }
   }
 
@@ -82,7 +82,7 @@ public class ManuplatorSubsystem extends SubsystemBase {
       isBreakMode = shouldEnable;
       NeutralMode mode = shouldEnable ? NeutralMode.Brake : NeutralMode.Coast;
 
-      handIntake.setNeutralMode(mode);
+      handMaster.setNeutralMode(mode);
     }
   }
 
@@ -98,7 +98,7 @@ public class ManuplatorSubsystem extends SubsystemBase {
   }
 
   public void hand(double speed) {
-    handMaster.set(speed);
+    elbowMaster.set(speed);
   }
 
   public class cone {
@@ -106,13 +106,13 @@ public class ManuplatorSubsystem extends SubsystemBase {
       intakeSolenoid.set(true);
     }
     public void execute_intake() {
-      handIntake.set(0.8);
+      handMaster.set(0.8);
     }
     public void execute_extract() {
       intakeSolenoid.set(false);
     }
     public void end() {
-      handIntake.set(0);
+      handMaster.set(0);
     }
   }
 
@@ -121,13 +121,13 @@ public class ManuplatorSubsystem extends SubsystemBase {
       intakeSolenoid.set(false);
     }
     public void execute_intake() {
-      handIntake.set(0.8);
+      handMaster.set(0.8);
     }
     public void execute_extract() {
-      handIntake.set(-0.8);
+      handMaster.set(-0.8);
     }
     public void end() {
-      handIntake.set(0);
+      handMaster.set(0);
     }
   }
 
