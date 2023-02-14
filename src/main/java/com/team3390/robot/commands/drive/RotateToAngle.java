@@ -12,7 +12,7 @@ public class RotateToAngle extends CommandBase {
   private final DriveSubsystem driveSubsystem;
   private final Supplier<Integer> angle;
 
-  private final PID pid = new PID(0.2, 0, 0.025, 3, 0.5, -0.5);
+  private final PID pid = new PID(0.2, 0, 0.025, 3, 0.7, -0.7);
 
   public RotateToAngle(DriveSubsystem driveSubsystem, Supplier<Integer> angle) {
     this.driveSubsystem = driveSubsystem;

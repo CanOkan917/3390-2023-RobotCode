@@ -15,12 +15,14 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import com.team3390.robot.Constants.LIMELIGHT_LIGHT_MODE;
 import com.team3390.robot.commands.autonomous.Cone;
 import com.team3390.robot.commands.autonomous.Cube;
+import com.team3390.robot.commands.autonomous.OnlyRamp;
 import com.team3390.robot.commands.drive.BalanceRobotCommand;
 import com.team3390.robot.commands.drive.LockAprilTags;
 import com.team3390.robot.commands.drive.LockRetroreflective;
+import com.team3390.robot.commands.drive.RotateToAngle;
 import com.team3390.robot.commands.drive.TankDriveCommand;
-import com.team3390.robot.commands.manuplators.BodyUp;
 import com.team3390.robot.commands.manuplators.ManuplatorMasterControl;
+import com.team3390.robot.commands.manuplators.BodyPosition;
 import com.team3390.robot.commands.utility.ResetSensorsCommand;
 import com.team3390.robot.subsystems.DriveSubsystem;
 import com.team3390.robot.subsystems.LimelightSubsystem;
@@ -66,10 +68,12 @@ public class RobotContainer {
     new Trigger(() -> leftStick.getRawButton(6)).onTrue(resetSensorsCommand);
     
     new Trigger(() -> gamepad.getRawButton(1)).whileTrue(lockRetroreflectiveCommand);
-    new Trigger(() -> gamepad.getRawButton(2)).whileTrue(lockAprilTagsCommand);
-    new Trigger(() -> gamepad.getRawButton(3)).whileTrue(balanceRobotCommand);
+    new Trigger(() -> gamepad.getRawButton(3)).whileTrue(lockAprilTagsCommand);
+    new Trigger(() -> gamepad.getRawButton(6)).whileTrue(balanceRobotCommand);
 
-    new Trigger(() -> gamepad.getRawButton(4)).onTrue(new BodyUp(manuplatorSubsystem, () -> -1.0, () -> 3.75));
+    new Trigger(() -> gamepad.getRawButton(5)).whileTrue(new RotateToAngle(driveSubsystem, () -> 180));
+
+    new Trigger(() -> gamepad.getRawButton(4)).onTrue(new BodyPosition(manuplatorSubsystem, () -> -1.0, () -> 3.75));
 
     driveSubsystem.resetSensors();
 
@@ -96,10 +100,10 @@ public class RobotContainer {
     autoChooser.addOption("Pos 8 (Cube)", 8);
     autoChooser.addOption("Pos 9 (Cone)", 9);
 
-    balanceChooser.setDefaultOption("Yes", true);
+    balanceChooser.setDefaultOption("Yes (Balance)", true);
     balanceChooser.addOption("No", false);
 
-    alwaysBalanceChooser.setDefaultOption("Yes", true);
+    alwaysBalanceChooser.setDefaultOption("Yes (Always)", true);
     alwaysBalanceChooser.addOption("No", false);
 
     SmartDashboard.putData("Auto Mode", autoChooser);

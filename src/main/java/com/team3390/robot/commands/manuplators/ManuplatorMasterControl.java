@@ -9,12 +9,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class ManuplatorMasterControl extends CommandBase {
 
   private final ManuplatorSubsystem manuplatorSubsystem;
-  private final Supplier<Double> body, hand;
+  private final Supplier<Double> body, elbow;
 
-  public ManuplatorMasterControl(ManuplatorSubsystem manuplatorSubsystem, Supplier<Double> body, Supplier<Double> hand) {
+  public ManuplatorMasterControl(ManuplatorSubsystem manuplatorSubsystem, Supplier<Double> body, Supplier<Double> elbow) {
     this.manuplatorSubsystem = manuplatorSubsystem;
     this.body = body;
-    this.hand = hand;
+    this.elbow = elbow;
     addRequirements(manuplatorSubsystem);
   }
 
@@ -23,8 +23,13 @@ public class ManuplatorMasterControl extends CommandBase {
 
   @Override
   public void execute() {
-    manuplatorSubsystem.hand(hand.get());
     manuplatorSubsystem.body(body.get());
+
+    // if (Math.abs(elbow.get()) < 0.15 && Math.abs(body.get()) > 0.05)
+    //   manuplatorSubsystem.elbow(Math.copySign(Constants.ELEVATOR_ELBOW_SPEED_COEFFICIENT, body.get()));
+    // else
+    //   manuplatorSubsystem.elbow(elbow.get());
+    manuplatorSubsystem.elbow(elbow.get());
   }
 
   @Override
@@ -32,6 +37,6 @@ public class ManuplatorMasterControl extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

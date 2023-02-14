@@ -55,8 +55,8 @@ public class ManuplatorSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    shuffleboard.eTopSwitchEnabledEntry.setBoolean(topSwitch.get());
-    shuffleboard.eBottomSwitchEnabledEntry.setBoolean(bottomSwtich.get());
+    shuffleboard.eTopSwitchEnabledEntry.setBoolean(isBodyOnTop());
+    shuffleboard.eBottomSwitchEnabledEntry.setBoolean(isBodyOnBottom());
   }
 
   public void setBodyBrakeMode(boolean shouldEnable) {
@@ -86,6 +86,14 @@ public class ManuplatorSubsystem extends SubsystemBase {
     }
   }
 
+  public boolean isBodyOnTop() {
+    return Constants.ELEVATOR_TOP_SWITCH_INVERTED ? !topSwitch.get() : topSwitch.get();
+  }
+
+  public boolean isBodyOnBottom() {
+    return Constants.ELEVATOR_BOTTOM_SWITCH_INVERTED ? !bottomSwtich.get() : bottomSwtich.get();
+  }
+
   public void bodyWithSwitches(double speed) {
     if (topSwitch.get() || bottomSwtich.get())
       bodyMaster.set(0);
@@ -97,7 +105,7 @@ public class ManuplatorSubsystem extends SubsystemBase {
     bodyMaster.set(speed);
   }
 
-  public void hand(double speed) {
+  public void elbow(double speed) {
     elbowMaster.set(speed);
   }
 

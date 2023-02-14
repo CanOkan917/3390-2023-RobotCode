@@ -7,14 +7,14 @@ import com.team3390.robot.subsystems.ManuplatorSubsystem;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class BodyUp extends CommandBase {
+public class BodyPosition extends CommandBase {
 
   private final ManuplatorSubsystem manuplatorSubsystem;
   private final Supplier<Double> body, seconds;
 
   private double startTime;
 
-  public BodyUp(ManuplatorSubsystem manuplatorSubsystem, Supplier<Double> body, Supplier<Double> seconds) {
+  public BodyPosition(ManuplatorSubsystem manuplatorSubsystem, Supplier<Double> body, Supplier<Double> seconds) {
     this.manuplatorSubsystem = manuplatorSubsystem;
     this.body = body;
     this.seconds = seconds;

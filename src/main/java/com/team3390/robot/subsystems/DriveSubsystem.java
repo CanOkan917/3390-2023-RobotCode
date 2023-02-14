@@ -138,8 +138,14 @@ public class DriveSubsystem extends SubsystemBase {
   public void balanceRobot() {
     if (!balancePID.atSetpoint()) {
       double roll = Math.floor(navX.getRoll()) + Constants.DRIVE_NAVX_ROLL_DEADBAND;
-      double calculatedSpeed = -balancePID.output(balancePID.calculate(roll, 0));
-      driveController.arcadeDrive(calculatedSpeed, 0);
+      double calculatedSpeed = balancePID.output(balancePID.calculate(roll, 0));
+      double rot = 0;
+      if (navX.getAngle() > 0) {
+        rot -= 0.3;
+      } else if (navX.getAngle() < 0) {
+        rot += 0.3;
+      }
+      driveController.arcadeDrive(calculatedSpeed, rot);
     } else {
       driveController.stopMotor();
     }

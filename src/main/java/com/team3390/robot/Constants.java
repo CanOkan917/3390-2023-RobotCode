@@ -21,22 +21,25 @@ public final class Constants {
   public static final boolean DRIVE_RIGHT_INVERTED = false;
   public static final int DRIVE_NAVX_ROLL_DEADBAND = 2;
   public static final double DRIVE_BALANCE_PID_KP = 0.1;
-  public static final double DRIVE_BALANCE_PID_KI = 0;
+  public static final double DRIVE_BALANCE_PID_KI = 0.05;
   public static final double DRIVE_BALANCE_PID_KD = 0;
-  public static final double DRIVE_BALANCE_PID_TOLERANCE = 2;
-  public static final double DRIVE_BALANCE_PID_MAXOUT = 0.7;
+  public static final double DRIVE_BALANCE_PID_TOLERANCE = 3;
+  public static final double DRIVE_BALANCE_PID_MAXOUT = 0.75;
   public static final double DRIVE_BALANCE_PID_MINOUT = DRIVE_BALANCE_PID_MAXOUT * -1;
-  public static final int DRIVE_DETECT_ROLL = 10;
+  public static final int DRIVE_DETECT_ROLL = 5;
 
   public static final int ELEVATOR_BODY_ID = 3;
   public static final boolean ELEVATOR_BODY_INVERTED = true;
   public static final int ELEVATOR_ELBOW_ID = 4;
   public static final boolean ELEVATOR_ELBOW_INVERTED = true;
+  public static final double ELEVATOR_ELBOW_SPEED_COEFFICIENT = 0.185;
   public static final int ELEVATOR_HAND_ID = 102;
   public static final boolean ELEVATOR_HAND_INVERTED = false;
   public static final int ELEVATOR_INTAKE_SOLENOID_PORT = 0;
   public static final int ELEVATOR_TOP_SWITCH_PORT = 0;
+  public static final boolean ELEVATOR_TOP_SWITCH_INVERTED = false;
   public static final int ELEVATOR_BOTTOM_SWITCH_PORT = 1;
+  public static final boolean ELEVATOR_BOTTOM_SWITCH_INVERTED = false;
 
   public static final Port SENSOR_NAVX_PORT = Port.kMXP;
 
