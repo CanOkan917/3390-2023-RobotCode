@@ -33,7 +33,7 @@ public final class Constants {
   public static final int ELEVATOR_ELBOW_ID = 4;
   public static final boolean ELEVATOR_ELBOW_INVERTED = true;
   public static final double ELEVATOR_ELBOW_SPEED_COEFFICIENT = 0.185;
-  public static final int ELEVATOR_HAND_ID = 102;
+  public static final int ELEVATOR_HAND_ID = 5;
   public static final boolean ELEVATOR_HAND_INVERTED = false;
   public static final int ELEVATOR_INTAKE_SOLENOID_PORT = 0;
   public static final int ELEVATOR_TOP_SWITCH_PORT = 0;

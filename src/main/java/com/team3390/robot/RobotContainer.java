@@ -5,7 +5,10 @@
 
 package com.team3390.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,10 +21,13 @@ import com.team3390.robot.commands.autonomous.Cube;
 import com.team3390.robot.commands.drive.BalanceRobotCommand;
 import com.team3390.robot.commands.drive.LockAprilTags;
 import com.team3390.robot.commands.drive.LockRetroreflective;
-import com.team3390.robot.commands.drive.RotateToAngle;
 import com.team3390.robot.commands.drive.TankDriveCommand;
 import com.team3390.robot.commands.manuplators.ManuplatorMasterControl;
 import com.team3390.robot.commands.manuplators.BodyPosition;
+import com.team3390.robot.commands.manuplators.ExtractCone;
+import com.team3390.robot.commands.manuplators.ExtractCube;
+import com.team3390.robot.commands.manuplators.IntakeCone;
+import com.team3390.robot.commands.manuplators.IntakeCube;
 import com.team3390.robot.commands.utility.ResetSensorsCommand;
 import com.team3390.robot.subsystems.DriveSubsystem;
 import com.team3390.robot.subsystems.LimelightSubsystem;
@@ -31,6 +37,8 @@ import com.team3390.robot.utility.LowPowerMode;
 public class RobotContainer {
 
   private final LowPowerMode lowPowerMode = LowPowerMode.INSTANCE;
+
+  private final Compressor comp = new Compressor(PneumaticsModuleType.CTREPCM);
 
   private final DriveSubsystem driveSubsystem = DriveSubsystem.getInstance();
   private final LimelightSubsystem limelightSubsystem = LimelightSubsystem.getInstance();
@@ -54,23 +62,37 @@ public class RobotContainer {
     limelightSubsystem.setPipeline(1);
   });
 
+  private final Command compOff = new InstantCommand(() -> {
+    comp.disable();
+  });
+  private final Command compOn = new InstantCommand(() -> {
+    comp.enableDigital();
+  });
+
   private final SendableChooser<Integer> autoChooser = new SendableChooser<>();
   private final SendableChooser<Boolean> balanceChooser = new SendableChooser<>();
   private final SendableChooser<Boolean> alwaysBalanceChooser = new SendableChooser<>();
   private Command sellectedAuto;
   
   public RobotContainer() {
+    CameraServer.startAutomaticCapture();
+
     new Trigger(() -> rightStick.getRawButton(4)).onTrue(setLimelightForRetroreflectiveTape);
     new Trigger(() -> rightStick.getRawButton(5)).onTrue(setLimelightForAprilTags);
-    new Trigger(() -> rightStick.getRawButton(2)).onTrue(lowPowerMode.toggleLowDriveModeCommand());
+    new Trigger(() -> rightStick.getRawButton(1)).onTrue(lowPowerMode.toggleLowDriveModeCommand());
 
     new Trigger(() -> leftStick.getRawButton(6)).onTrue(resetSensorsCommand);
+    new Trigger(() -> leftStick.getRawButton(4)).onTrue(compOff);
+    new Trigger(() -> leftStick.getRawButton(5)).onTrue(compOn);
     
     new Trigger(() -> gamepad.getRawButton(1)).whileTrue(lockRetroreflectiveCommand);
     new Trigger(() -> gamepad.getRawButton(3)).whileTrue(lockAprilTagsCommand);
-    new Trigger(() -> gamepad.getRawButton(6)).whileTrue(balanceRobotCommand);
+    // new Trigger(() -> gamepad.getRawButton(6)).whileTrue(balanceRobotCommand);
 
-    new Trigger(() -> gamepad.getRawButton(5)).whileTrue(new RotateToAngle(driveSubsystem, () -> 180));
+    new Trigger(() -> gamepad.getRawButton(5)).whileTrue(new IntakeCube(manuplatorSubsystem));
+    new Trigger(() -> gamepad.getRawButton(6)).whileTrue(new ExtractCube(manuplatorSubsystem));
+    new Trigger(() -> gamepad.getRawButton(7)).whileTrue(new IntakeCone(manuplatorSubsystem));
+    new Trigger(() -> gamepad.getRawButton(8)).whileTrue(new ExtractCone(manuplatorSubsystem));
 
     new Trigger(() -> gamepad.getRawButton(4)).onTrue(new BodyPosition(manuplatorSubsystem, () -> -1.0, () -> 3.75));
 

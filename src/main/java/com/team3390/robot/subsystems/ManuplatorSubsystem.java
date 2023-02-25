@@ -109,34 +109,30 @@ public class ManuplatorSubsystem extends SubsystemBase {
     elbowMaster.set(speed);
   }
 
-  public class cone {
-    public void init() {
-      intakeSolenoid.set(true);
-    }
-    public void execute_intake() {
-      handMaster.set(0.8);
-    }
-    public void execute_extract() {
-      intakeSolenoid.set(false);
-    }
-    public void end() {
-      handMaster.set(0);
-    }
+  public void cone_init() {
+    intakeSolenoid.set(true);
+  }
+  public void cone_execute_intake() {
+    handMaster.set(1);
+  }
+  public void cone_execute_extract() {
+    intakeSolenoid.set(false);
+  }
+  public void cone_end() {
+    handMaster.set(0);
   }
 
-  public class cube {
-    public void init() {
-      intakeSolenoid.set(false);
-    }
-    public void execute_intake() {
-      handMaster.set(0.8);
-    }
-    public void execute_extract() {
-      handMaster.set(-0.8);
-    }
-    public void end() {
-      handMaster.set(0);
-    }
+  public void cube_init() {
+    intakeSolenoid.set(false);
+  }
+  public void cube_execute_intake() {
+    handMaster.set(1);
+  }
+  public void cube_execute_extract() {
+    handMaster.set(-1);
+  }
+  public void cube_end() {
+    handMaster.set(0);
   }
 
 }
