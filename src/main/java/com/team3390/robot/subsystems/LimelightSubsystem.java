@@ -7,12 +7,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.team3390.robot.utility.PID;
 import com.team3390.robot.Constants;
-import com.team3390.robot.utility.CompetitionShuffleboard;
 
 public class LimelightSubsystem extends SubsystemBase {
 
   private final NetworkTable networkTable;
-  private final CompetitionShuffleboard shuffleBoard = CompetitionShuffleboard.getInstance();
 
   private final NetworkTableEntry tX; // Derece cinsinden dikey
   private final NetworkTableEntry tY; // Derece cinsinden yatay
@@ -61,12 +59,7 @@ public class LimelightSubsystem extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
-    shuffleBoard.lmXAtSetpointEntry.setBoolean(XAtSetpoint_APRIL() || XAtSetpoint_RETRO());
-    shuffleBoard.lmYAtSetpointEntry.setBoolean(YAtSetpoint_APRIL() || YAtSetpoint_RETRO());
-    shuffleBoard.lmAtSetpointEntry.setBoolean(atSetpoint_APRIL() || atSetpoint_RETRO());
-    shuffleBoard.lmIsTargetEntry.setBoolean(isTarget());
-  }
+  public void periodic() {}
 
   /**
 	 * Helper method to get an entry from the Limelight NetworkTable.

@@ -5,17 +5,17 @@ import com.team3390.lib.drivers.LazyTalonSRX;
 import com.team3390.lib.drivers.TalonSRXCreator;
 import com.team3390.lib.drivers.TalonSRXCreator.Configuration;
 import com.team3390.robot.Constants;
-import com.team3390.robot.utility.CompetitionShuffleboard;
 
-import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ManuplatorSubsystem extends SubsystemBase {
 
   private static ManuplatorSubsystem instance;
-  private final CompetitionShuffleboard shuffleboard = CompetitionShuffleboard.getInstance();
 
   private boolean isBreakMode = false;
 
@@ -25,7 +25,8 @@ public class ManuplatorSubsystem extends SubsystemBase {
   private final Configuration elbowConfiguration = new Configuration();
   private final Configuration handConfiguration = new Configuration();
 
-  private final DigitalInput topSwitch, bottomSwtich;
+  public final AnalogGyro bodyGyro;
+  public double gyroOffset = 0;
 
   private final Solenoid intakeSolenoid;
 
@@ -47,16 +48,22 @@ public class ManuplatorSubsystem extends SubsystemBase {
     elbowMaster = TalonSRXCreator.createTalon(Constants.ELEVATOR_ELBOW_ID, elbowConfiguration);
     handMaster = TalonSRXCreator.createTalon(Constants.ELEVATOR_HAND_ID, handConfiguration);
 
-    topSwitch = new DigitalInput(Constants.ELEVATOR_TOP_SWITCH_PORT);
-    bottomSwtich = new DigitalInput(Constants.ELEVATOR_BOTTOM_SWITCH_PORT);
+    bodyGyro = new AnalogGyro(Constants.SENSOR_BODY_GYRO_PORT);
 
     intakeSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.ELEVATOR_INTAKE_SOLENOID_PORT);
+    
+    bodyGyro.reset();
   }
 
   @Override
   public void periodic() {
-    shuffleboard.eTopSwitchEnabledEntry.setBoolean(isBodyOnTop());
-    shuffleboard.eBottomSwitchEnabledEntry.setBoolean(isBodyOnBottom());
+    SmartDashboard.putNumber("Gyro Angle", bodyGyro.getAngle());
+  }
+
+  public CommandBase resetGyro() {
+    return runOnce(() -> {
+      bodyGyro.reset();
+    });
   }
 
   public void setBodyBrakeMode(boolean shouldEnable) {
@@ -86,23 +93,15 @@ public class ManuplatorSubsystem extends SubsystemBase {
     }
   }
 
-  public boolean isBodyOnTop() {
-    return Constants.ELEVATOR_TOP_SWITCH_INVERTED ? !topSwitch.get() : topSwitch.get();
-  }
-
-  public boolean isBodyOnBottom() {
-    return Constants.ELEVATOR_BOTTOM_SWITCH_INVERTED ? !bottomSwtich.get() : bottomSwtich.get();
-  }
-
-  public void bodyWithSwitches(double speed) {
-    if (topSwitch.get() || bottomSwtich.get())
-      bodyMaster.set(0);
-    else
-      bodyMaster.set(speed);
+  public double getAngle() {
+    return bodyGyro.getAngle() + gyroOffset;
   }
 
   public void body(double speed) {
-    bodyMaster.set(speed);
+    if (getAngle() <= Constants.ELEVATOR_BODY_MAX_ANGLE)
+      bodyMaster.set(speed);
+    else
+      bodyMaster.set(0);
   }
 
   public void elbow(double speed) {
