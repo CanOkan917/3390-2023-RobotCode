@@ -5,17 +5,18 @@ import com.team3390.lib.drivers.LazyTalonSRX;
 import com.team3390.lib.drivers.TalonSRXCreator;
 import com.team3390.lib.drivers.TalonSRXCreator.Configuration;
 import com.team3390.robot.Constants;
+import com.team3390.robot.utility.CompetitionShuffleboard;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ManuplatorSubsystem extends SubsystemBase {
 
   private static ManuplatorSubsystem instance;
+  private final CompetitionShuffleboard shuffleboard = CompetitionShuffleboard.getInstance();
 
   private boolean isBreakMode = false;
 
@@ -57,7 +58,7 @@ public class ManuplatorSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Gyro Angle", bodyGyro.getAngle());
+    shuffleboard.robotManuplatorBodyAngleEntry.setDouble(getAngle());
   }
 
   public CommandBase resetGyro() {

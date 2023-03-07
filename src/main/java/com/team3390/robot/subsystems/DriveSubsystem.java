@@ -21,7 +21,7 @@ public class DriveSubsystem extends SubsystemBase {
   private static DriveSubsystem instance; 
   private final CompetitionShuffleboard shuffleboard = CompetitionShuffleboard.getInstance();
 
-  private boolean isBreakMode = true;
+  private boolean isBreakMode = false;
 
   private final Configuration talonConfiguration = new Configuration();
   private final LazyTalonSRX leftMaster, rightMaster, leftSlave1, rightSlave1, leftSlave2, rightSlave2;
@@ -73,10 +73,11 @@ public class DriveSubsystem extends SubsystemBase {
     shuffleboard.robotLowPowerModeEntry.setBoolean(LowPowerMode.INSTANCE.getLowDriveModeEnabled());
     SmartDashboard.putNumber("Roll", getRobotRoll());
     SmartDashboard.putNumber("Heading", getHeading());
+    SmartDashboard.putNumber("PID out", balancePID.output(balancePID.calculate(getRobotRoll(), 0)));
   }
 
   public double getRobotRoll() {
-    return Math.floor(navX.getRoll()) + Constants.DRIVE_NAVX_ROLL_DEADBAND;
+    return navX.getRoll() + Constants.DRIVE_NAVX_ROLL_DEADBAND;
   }
 
   public double getHeading() {

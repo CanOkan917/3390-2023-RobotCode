@@ -1,5 +1,7 @@
 package com.team3390.robot.commands.drive;
 
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import com.team3390.robot.subsystems.DriveSubsystem;
@@ -7,11 +9,11 @@ import com.team3390.robot.subsystems.DriveSubsystem;
 public class BalanceRobotCommand extends CommandBase {
   
   private final DriveSubsystem driveSubsystem;
-  private final boolean always;
 
-  public BalanceRobotCommand(DriveSubsystem driveSubsystem, boolean always) {
+  private int i = 0;
+
+  public BalanceRobotCommand(DriveSubsystem driveSubsystem) {
     this.driveSubsystem = driveSubsystem;
-    this.always = always;
     addRequirements(driveSubsystem);
   }
 
@@ -20,7 +22,13 @@ public class BalanceRobotCommand extends CommandBase {
 
   @Override
   public void execute() {
-    driveSubsystem.balanceRobot();
+    if (i != Math.round(Timer.getFPGATimestamp())) {
+      driveSubsystem.driveStraight(0.3, 0);
+      i = (int) Math.round(Timer.getFPGATimestamp());
+    } else {
+      driveSubsystem.stopMotors();
+    }
+    SmartDashboard.putNumber("i", (int) Math.round(Timer.getFPGATimestamp()));
   }
 
   @Override
@@ -28,10 +36,6 @@ public class BalanceRobotCommand extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    // return Math.abs(driveSubsystem.getRobotRoll()) < Constants.DRIVE_NAVX_ROLL_DEADBAND;
-    if (always) {
-      return false;
-    }
-    return driveSubsystem.isBalanced();
+    return driveSubsystem.getRobotRoll() > -3 || driveSubsystem.getRobotRoll() < 3;
   }
 }

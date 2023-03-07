@@ -6,7 +6,6 @@
 package com.team3390.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -36,16 +35,13 @@ import com.team3390.robot.commands.utility.ResetSensorsCommand;
 import com.team3390.robot.subsystems.DriveSubsystem;
 import com.team3390.robot.subsystems.LimelightSubsystem;
 import com.team3390.robot.subsystems.ManuplatorSubsystem;
-import com.team3390.robot.utility.CompetitionShuffleboard;
 import com.team3390.robot.utility.LowPowerMode;
 
 public class RobotContainer {
 
-  private final CompetitionShuffleboard shuffleboard = CompetitionShuffleboard.getInstance();
   private final LowPowerMode lowPowerMode = LowPowerMode.INSTANCE;
 
   private final Compressor comp = new Compressor(PneumaticsModuleType.CTREPCM);
-  private final AnalogInput pressureSensor = new AnalogInput(Constants.SENSOR_PRESSURE_PORT);
 
   private final DriveSubsystem driveSubsystem = DriveSubsystem.getInstance();
   private final LimelightSubsystem limelightSubsystem = LimelightSubsystem.getInstance();
@@ -55,7 +51,7 @@ public class RobotContainer {
   private final Joystick rightStick = new Joystick(Constants.JOYSTICK_RIGHT_PORT);
   private final Joystick gamepad = new Joystick(Constants.JOYSTICK_GAMEPAD_PORT);
 
-  private final BalanceRobotCommand balanceRobotCommand = new BalanceRobotCommand(driveSubsystem, true);
+  private final BalanceRobotCommand balanceRobotCommand = new BalanceRobotCommand(driveSubsystem);
   private final ResetSensorsCommand resetSensorsCommand = new ResetSensorsCommand(driveSubsystem);
   private final LockRetroreflective lockRetroreflectiveCommand = new LockRetroreflective(driveSubsystem);
   private final LockAprilTags lockAprilTagsCommand = new LockAprilTags(driveSubsystem);
@@ -120,8 +116,6 @@ public class RobotContainer {
 
     limelightSubsystem.setLedMode(LIMELIGHT_LIGHT_MODE.OFF);
     limelightSubsystem.setCamMode(LIMELIGHT_CAMERA_MODE.DRIVE);
-
-    shuffleboard.robotTankPressureEntry.setDouble(pressureSensor.getValue());
 
     driveSubsystem.setDefaultCommand(
       new TankDriveCommand(

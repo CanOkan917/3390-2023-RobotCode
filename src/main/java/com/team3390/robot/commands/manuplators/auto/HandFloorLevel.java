@@ -28,12 +28,12 @@ public class HandFloorLevel extends CommandBase {
     manuplatorSubsystem.body(0);
     manuplatorSubsystem.elbow(0);
     manuplatorSubsystem.bodyGyro.reset();
-    manuplatorSubsystem.gyroOffset = 0;
+    manuplatorSubsystem.gyroOffset = 20;
   }
 
   @Override
   public boolean isFinished() {
-    return manuplatorSubsystem.getAngle() <= 0;
+    return manuplatorSubsystem.getAngle() <= 20;
   }
 
 }
