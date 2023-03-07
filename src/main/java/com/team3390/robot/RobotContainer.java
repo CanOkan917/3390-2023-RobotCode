@@ -5,6 +5,27 @@
 
 package com.team3390.robot;
 
+import com.team3390.robot.Constants.LIMELIGHT_LIGHT_MODE;
+import com.team3390.robot.commands.autonomous.Cone;
+import com.team3390.robot.commands.autonomous.Cube;
+import com.team3390.robot.commands.autonomous.OnlyRamp;
+import com.team3390.robot.commands.drive.BalanceRobotCommand;
+import com.team3390.robot.commands.drive.LockAprilTags;
+import com.team3390.robot.commands.drive.LockRetroreflective;
+import com.team3390.robot.commands.drive.TankDriveCommand;
+import com.team3390.robot.commands.manuplators.ExtractCone;
+import com.team3390.robot.commands.manuplators.ExtractCube;
+import com.team3390.robot.commands.manuplators.IntakeCone;
+import com.team3390.robot.commands.manuplators.IntakeCube;
+import com.team3390.robot.commands.manuplators.ManuplatorMasterControl;
+import com.team3390.robot.commands.manuplators.auto.Hand3rdLevel;
+import com.team3390.robot.commands.manuplators.auto.HandFloorLevel;
+import com.team3390.robot.commands.utility.ResetSensorsCommand;
+import com.team3390.robot.subsystems.DriveSubsystem;
+import com.team3390.robot.subsystems.LimelightSubsystem;
+import com.team3390.robot.subsystems.ManuplatorSubsystem;
+import com.team3390.robot.utility.LowPowerMode;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Joystick;
@@ -14,28 +35,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
-import com.team3390.robot.Constants.LIMELIGHT_LIGHT_MODE;
-import com.team3390.robot.Constants.LIMELIGHT_CAMERA_MODE;
-import com.team3390.robot.commands.autonomous.Cube;
-import com.team3390.robot.commands.autonomous.OnlyRamp;
-import com.team3390.robot.commands.autonomous.Cone;
-import com.team3390.robot.commands.drive.BalanceRobotCommand;
-import com.team3390.robot.commands.drive.LockAprilTags;
-import com.team3390.robot.commands.drive.LockRetroreflective;
-import com.team3390.robot.commands.drive.TankDriveCommand;
-import com.team3390.robot.commands.manuplators.ManuplatorMasterControl;
-import com.team3390.robot.commands.manuplators.auto.Hand3rdLevel;
-import com.team3390.robot.commands.manuplators.auto.HandFloorLevel;
-import com.team3390.robot.commands.manuplators.ExtractCone;
-import com.team3390.robot.commands.manuplators.ExtractCube;
-import com.team3390.robot.commands.manuplators.IntakeCone;
-import com.team3390.robot.commands.manuplators.IntakeCube;
-import com.team3390.robot.commands.utility.ResetSensorsCommand;
-import com.team3390.robot.subsystems.DriveSubsystem;
-import com.team3390.robot.subsystems.LimelightSubsystem;
-import com.team3390.robot.subsystems.ManuplatorSubsystem;
-import com.team3390.robot.utility.LowPowerMode;
 
 public class RobotContainer {
 
@@ -62,7 +61,6 @@ public class RobotContainer {
   private final Hand3rdLevel hand3rdLevel = new Hand3rdLevel(manuplatorSubsystem);
   private final HandFloorLevel handFloorLevel = new HandFloorLevel(manuplatorSubsystem);
 
-
   private final Command setLimelightForRetroreflectiveTape = new InstantCommand(() -> {
     limelightSubsystem.setLedMode(LIMELIGHT_LIGHT_MODE.ON);
     limelightSubsystem.setPipeline(0);
@@ -72,8 +70,7 @@ public class RobotContainer {
     limelightSubsystem.setPipeline(1);
   });
   private final Command setLimelightForCamera = new InstantCommand(() -> {
-    limelightSubsystem.setLedMode(LIMELIGHT_LIGHT_MODE.OFF);
-    limelightSubsystem.setCamMode(LIMELIGHT_CAMERA_MODE.DRIVE);
+    limelightSubsystem.setPipeline(2);
   });
 
   private final Command compOff = new InstantCommand(() -> {
@@ -114,8 +111,7 @@ public class RobotContainer {
 
     driveSubsystem.resetSensors();
 
-    limelightSubsystem.setLedMode(LIMELIGHT_LIGHT_MODE.OFF);
-    limelightSubsystem.setCamMode(LIMELIGHT_CAMERA_MODE.DRIVE);
+    limelightSubsystem.setPipeline(2);
 
     driveSubsystem.setDefaultCommand(
       new TankDriveCommand(
