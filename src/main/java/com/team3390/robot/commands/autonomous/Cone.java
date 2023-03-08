@@ -30,7 +30,7 @@ public class Cone extends SequentialCommandGroup {
       ),
       new ParallelCommandGroup(
         new ParallelDeadlineGroup(
-          new WaitCommand(2),
+          new WaitCommand(1),
           new DriveStraight(driveSubsystem, 0.7)  
         ),
         new HandFloorLevel(manuplatorSubsystem)

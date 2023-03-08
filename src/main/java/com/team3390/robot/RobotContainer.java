@@ -5,6 +5,7 @@
 
 package com.team3390.robot;
 
+import com.team3390.lib.sensors.PressureSensor;
 import com.team3390.robot.Constants.LIMELIGHT_LIGHT_MODE;
 import com.team3390.robot.commands.autonomous.Cone;
 import com.team3390.robot.commands.autonomous.Cube;
@@ -41,6 +42,7 @@ public class RobotContainer {
   private final LowPowerMode lowPowerMode = LowPowerMode.INSTANCE;
 
   private final Compressor comp = new Compressor(PneumaticsModuleType.CTREPCM);
+  private final PressureSensor pressureSensor = new PressureSensor(Constants.SENSOR_PRESSURE_PORT);
 
   private final DriveSubsystem driveSubsystem = DriveSubsystem.getInstance();
   private final LimelightSubsystem limelightSubsystem = LimelightSubsystem.getInstance();
@@ -50,16 +52,16 @@ public class RobotContainer {
   private final Joystick rightStick = new Joystick(Constants.JOYSTICK_RIGHT_PORT);
   private final Joystick gamepad = new Joystick(Constants.JOYSTICK_GAMEPAD_PORT);
 
-  private final BalanceRobotCommand balanceRobotCommand = new BalanceRobotCommand(driveSubsystem);
-  private final ResetSensorsCommand resetSensorsCommand = new ResetSensorsCommand(driveSubsystem);
-  private final LockRetroreflective lockRetroreflectiveCommand = new LockRetroreflective(driveSubsystem);
-  private final LockAprilTags lockAprilTagsCommand = new LockAprilTags(driveSubsystem);
-  private final IntakeCube intakeCube = new IntakeCube(manuplatorSubsystem);
-  private final IntakeCone intakeCone = new IntakeCone(manuplatorSubsystem);
-  private final ExtractCube extractCube = new ExtractCube(manuplatorSubsystem);
-  private final ExtractCone extractCone = new ExtractCone(manuplatorSubsystem);
-  private final Hand3rdLevel hand3rdLevel = new Hand3rdLevel(manuplatorSubsystem);
-  private final HandFloorLevel handFloorLevel = new HandFloorLevel(manuplatorSubsystem);
+  private final Command balanceRobotCommand = new BalanceRobotCommand(driveSubsystem);
+  private final Command resetSensorsCommand = new ResetSensorsCommand(driveSubsystem);
+  private final Command lockRetroreflectiveCommand = new LockRetroreflective(driveSubsystem);
+  private final Command lockAprilTagsCommand = new LockAprilTags(driveSubsystem);
+  private final Command intakeCube = new IntakeCube(manuplatorSubsystem);
+  private final Command intakeCone = new IntakeCone(manuplatorSubsystem);
+  private final Command extractCube = new ExtractCube(manuplatorSubsystem);
+  private final Command extractCone = new ExtractCone(manuplatorSubsystem);
+  private final Command hand3rdLevel = new Hand3rdLevel(manuplatorSubsystem);
+  private final Command handFloorLevel = new HandFloorLevel(manuplatorSubsystem);
 
   private final Command setLimelightForRetroreflectiveTape = new InstantCommand(() -> {
     limelightSubsystem.setLedMode(LIMELIGHT_LIGHT_MODE.ON);
@@ -141,6 +143,10 @@ public class RobotContainer {
     SmartDashboard.putData("Auto Mode", gamePieceChooser);
     SmartDashboard.putData("Balance", balanceChooser);
     SmartDashboard.putData("Always Balance", alwaysBalanceChooser);
+  }
+
+  public void updateVars() {
+    SmartDashboard.putNumber("Pressure", pressureSensor.getPressure());
   }
 
   public Command getAutonomousCommand() {

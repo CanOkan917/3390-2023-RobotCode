@@ -17,10 +17,6 @@ public class OnlyRamp extends SequentialCommandGroup {
         new WaitCommand(3.5),
         new DriveStraight(driveSubsystem, 0.7)  
       )
-      // new BalanceRobotCommand(driveSubsystem),
-      // new WaitCommand(0.5),
-      // new RotateToAngle(driveSubsystem, () -> 0),
-      // new BalanceRobotCommand(driveSubsystem)
     );
   }
 }
