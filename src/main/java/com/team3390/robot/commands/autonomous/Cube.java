@@ -26,6 +26,10 @@ public class Cube extends SequentialCommandGroup {
       ),
       new Hand3rdLevel(manuplatorSubsystem),
       new ParallelDeadlineGroup(
+        new WaitCommand(0.75),
+        new DriveStraight(driveSubsystem, -0.6)  
+      ),
+      new ParallelDeadlineGroup(
         new WaitCommand(0.2),
         new ExtractCube(manuplatorSubsystem)
       ),
