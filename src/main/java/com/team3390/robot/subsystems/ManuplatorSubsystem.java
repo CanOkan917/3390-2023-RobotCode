@@ -76,7 +76,7 @@ public class ManuplatorSubsystem extends SubsystemBase {
     }
   }
 
-  public void setHandBrakeMode(boolean shouldEnable) {
+  public void setElbowBrakeMode(boolean shouldEnable) {
     if (isBreakMode != shouldEnable) {
       isBreakMode = shouldEnable;
       NeutralMode mode = shouldEnable ? NeutralMode.Brake : NeutralMode.Coast;
@@ -99,10 +99,7 @@ public class ManuplatorSubsystem extends SubsystemBase {
   }
 
   public void body(double speed) {
-    if (getAngle() <= Constants.ELEVATOR_BODY_MAX_ANGLE)
-      bodyMaster.set(speed);
-    else
-      bodyMaster.set(0);
+    bodyMaster.set(speed);
   }
 
   public void elbow(double speed) {

@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class Cube extends SequentialCommandGroup {
 
-  public Cube(DriveSubsystem driveSubsystem, ManuplatorSubsystem manuplatorSubsystem, boolean balance, boolean always) {
+  public Cube(DriveSubsystem driveSubsystem, ManuplatorSubsystem manuplatorSubsystem, boolean balance) {
     manuplatorSubsystem.bodyGyro.reset();
     addCommands(
       new ResetSensorsCommand(driveSubsystem),
@@ -42,7 +42,7 @@ public class Cube extends SequentialCommandGroup {
       addCommands(
         new ParallelCommandGroup(
           new HandFloorLevel(manuplatorSubsystem),
-          new OnlyRamp(driveSubsystem, always)
+          new OnlyRamp(driveSubsystem)
         )
       );
     }

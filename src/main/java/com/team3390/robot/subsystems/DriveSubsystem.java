@@ -2,11 +2,6 @@ package com.team3390.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.kauailabs.navx.frc.AHRS;
-
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import com.team3390.lib.drivers.LazyTalonSRX;
 import com.team3390.lib.drivers.TalonSRXCreator;
 import com.team3390.lib.drivers.TalonSRXCreator.Configuration;
@@ -15,6 +10,10 @@ import com.team3390.robot.Constants.LOWPOWERMODE_INCREASE_TYPE;
 import com.team3390.robot.utility.CompetitionShuffleboard;
 import com.team3390.robot.utility.LowPowerMode;
 import com.team3390.robot.utility.PID;
+
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
   
@@ -36,8 +35,6 @@ public class DriveSubsystem extends SubsystemBase {
     Constants.DRIVE_BALANCE_PID_MAXOUT,
     Constants.DRIVE_BALANCE_PID_MINOUT
   );
-
-  private final LimelightSubsystem limelight = LimelightSubsystem.getInstance();
 
   public synchronized static DriveSubsystem getInstance() {
     if (instance == null) {
@@ -71,9 +68,10 @@ public class DriveSubsystem extends SubsystemBase {
   public void periodic() {
     shuffleboard.robotBalancedEntry.setBoolean(isBalanced());
     shuffleboard.robotLowPowerModeEntry.setBoolean(LowPowerMode.INSTANCE.getLowDriveModeEnabled());
-    SmartDashboard.putNumber("Roll", getRobotRoll());
-    SmartDashboard.putNumber("Heading", getHeading());
-    SmartDashboard.putNumber("PID out", balancePID.output(balancePID.calculate(getRobotRoll(), 0)));
+    shuffleboard.robotRollEntry.setDouble(getRobotRoll());
+    shuffleboard.robotHeadingEntry.setDouble(getHeading());
+    
+    SmartDashboard.putNumber("Balance PID out", balancePID.output(balancePID.calculate(getRobotRoll(), 0)));
   }
 
   public double getRobotRoll() {
@@ -161,22 +159,4 @@ public class DriveSubsystem extends SubsystemBase {
     arcadeDrivePercent(fwd, rot);
   }
 
-  public void LockRetroreflective() {
-    if (limelight.isTarget() && !limelight.atSetpoint_RETRO()) {
-      double xSpeed = -limelight.getXOutput();
-      double ySpeed = -limelight.getYOutput();
-      SmartDashboard.putNumber("X", xSpeed);
-      SmartDashboard.putNumber("Y", ySpeed);
-      arcadeDrivePercent(ySpeed, xSpeed / 2);
-    }
-  }
-  public void LockAprilTags() {
-    if (limelight.isTarget() && !limelight.atSetpoint_APRIL()) {
-      double xSpeed = -limelight.getXOutput();
-      double ySpeed = -limelight.getYOutput();
-      SmartDashboard.putNumber("X", xSpeed);
-      SmartDashboard.putNumber("Y", ySpeed);
-      arcadeDrivePercent(ySpeed, xSpeed / 1.5);
-    }
-  }
 }

@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class OnlyRamp extends SequentialCommandGroup {
-  public OnlyRamp(DriveSubsystem driveSubsystem, boolean always) {
+  public OnlyRamp(DriveSubsystem driveSubsystem) {
     addCommands(
       new ResetSensorsCommand(driveSubsystem),
       // new DriveUntilCustomNavXRoll(driveSubsystem, Constants.DRIVE_DETECT_ROLL, false, () -> 0.7, () -> 0.0)
