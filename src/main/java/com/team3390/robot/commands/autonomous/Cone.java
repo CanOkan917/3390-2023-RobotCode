@@ -25,15 +25,12 @@ public class Cone extends SequentialCommandGroup {
       ),
       new Hand3rdLevel(manuplatorSubsystem),
       new ParallelDeadlineGroup(
+        new WaitCommand(1),
+        new DriveStraight(driveSubsystem, -0.6)  
+      ),
+      new ParallelDeadlineGroup(
         new WaitCommand(0.1),
         new ExtractCone(manuplatorSubsystem)
-      ),
-      new ParallelCommandGroup(
-        new ParallelDeadlineGroup(
-          new WaitCommand(1),
-          new DriveStraight(driveSubsystem, 0.7)  
-        ),
-        new HandFloorLevel(manuplatorSubsystem)
       )
     );
 
@@ -42,6 +39,16 @@ public class Cone extends SequentialCommandGroup {
         new ParallelCommandGroup(
           new HandFloorLevel(manuplatorSubsystem),
           new OnlyRamp(driveSubsystem)
+        )
+      );
+    } else {
+      addCommands(
+        new ParallelCommandGroup(
+          new ParallelDeadlineGroup(
+            new WaitCommand(1),
+            new DriveStraight(driveSubsystem, 0.7)  
+          ),
+          new HandFloorLevel(manuplatorSubsystem)
         )
       );
     }
