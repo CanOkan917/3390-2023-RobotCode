@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class Cone extends SequentialCommandGroup {
-  public Cone(DriveSubsystem driveSubsystem, ManuplatorSubsystem manuplatorSubsystem, boolean balance, boolean always) {
+  public Cone(DriveSubsystem driveSubsystem, ManuplatorSubsystem manuplatorSubsystem, boolean balance) {
     manuplatorSubsystem.bodyGyro.reset();
     addCommands(
       new ResetSensorsCommand(driveSubsystem),
@@ -30,7 +30,7 @@ public class Cone extends SequentialCommandGroup {
       ),
       new ParallelCommandGroup(
         new ParallelDeadlineGroup(
-          new WaitCommand(2),
+          new WaitCommand(1),
           new DriveStraight(driveSubsystem, 0.7)  
         ),
         new HandFloorLevel(manuplatorSubsystem)
@@ -41,7 +41,7 @@ public class Cone extends SequentialCommandGroup {
       addCommands(
         new ParallelCommandGroup(
           new HandFloorLevel(manuplatorSubsystem),
-          new OnlyRamp(driveSubsystem, always)
+          new OnlyRamp(driveSubsystem)
         )
       );
     }

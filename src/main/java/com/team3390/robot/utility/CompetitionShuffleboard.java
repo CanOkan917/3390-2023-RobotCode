@@ -15,9 +15,14 @@ public class CompetitionShuffleboard {
   // DriveSubsystem
   public final GenericEntry robotBalancedEntry;
   public final GenericEntry robotLowPowerModeEntry;
+  public final GenericEntry robotRollEntry;
+  public final GenericEntry robotHeadingEntry;
 
   // Manuplator
   public final GenericEntry robotManuplatorBodyAngleEntry;
+
+  // Air
+  public final GenericEntry robotPressureEntry;
 
   public static synchronized CompetitionShuffleboard getInstance() {
     if (instance == null) {
@@ -34,7 +39,10 @@ public class CompetitionShuffleboard {
 
     robotBalancedEntry = tab.add("Balanced", false).getEntry();
     robotLowPowerModeEntry = tab.add("LP Enabled", false).getEntry();
+    robotRollEntry = tab.add("Robot Roll", 0.0).getEntry();
+    robotHeadingEntry = tab.add("Robot Heading", 0.0).getEntry();
     robotManuplatorBodyAngleEntry = tab.add("Body Angle", 0.0).getEntry();
+    robotPressureEntry = tab.add("Air Pressure", 0.0).getEntry();
   }
 
 }
