@@ -152,6 +152,7 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     int sellected = gamePieceChooser.getSelected();
+    limelightSubsystem.setPipeline(2);
 
     switch (sellected) {
       case 1:
