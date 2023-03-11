@@ -1,8 +1,6 @@
 package com.team3390.robot.commands.autonomous;
 
-import com.team3390.robot.Constants;
 import com.team3390.robot.commands.drive.DriveStraight;
-import com.team3390.robot.commands.drive.DriveUntilCustomNavXRoll;
 import com.team3390.robot.commands.utility.ResetSensorsCommand;
 import com.team3390.robot.subsystems.DriveSubsystem;
 
@@ -14,10 +12,9 @@ public class OnlyRamp extends SequentialCommandGroup {
   public OnlyRamp(DriveSubsystem driveSubsystem) {
     addCommands(
       new ResetSensorsCommand(driveSubsystem),
-      new DriveUntilCustomNavXRoll(driveSubsystem, Constants.DRIVE_DETECT_ROLL, false, () -> 0.6, () -> 0.0),
       new ParallelDeadlineGroup(
-        new WaitCommand(0.35),
-        new DriveStraight(driveSubsystem, 0.7)
+        new WaitCommand(2),
+        new DriveStraight(driveSubsystem, 0.8)
       )
     );
   }
