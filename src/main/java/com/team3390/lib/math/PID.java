@@ -1,6 +1,6 @@
-package com.team3390.robot.utility;
+package com.team3390.lib.math;
 
-import edu.wpi.first.math.controller.PIDController;
+import com.team3390.lib.math.impl.PIDController;
 
 public class PID {
     /**

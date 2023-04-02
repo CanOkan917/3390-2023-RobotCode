@@ -67,6 +67,10 @@ public class ManuplatorSubsystem extends SubsystemBase {
     });
   }
 
+  public void resetSensors() {
+    bodyGyro.reset();
+  }
+
   public void setBodyBrakeMode(boolean shouldEnable) {
     if (isBreakMode != shouldEnable) {
       isBreakMode = shouldEnable;
@@ -130,6 +134,10 @@ public class ManuplatorSubsystem extends SubsystemBase {
   }
   public void cube_end() {
     handMaster.set(0);
+  }
+
+  public void hand_periodic() {
+    handMaster.set(0.25);
   }
 
 }

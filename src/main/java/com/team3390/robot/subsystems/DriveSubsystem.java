@@ -5,11 +5,11 @@ import com.kauailabs.navx.frc.AHRS;
 import com.team3390.lib.drivers.LazyTalonSRX;
 import com.team3390.lib.drivers.TalonSRXCreator;
 import com.team3390.lib.drivers.TalonSRXCreator.Configuration;
+import com.team3390.lib.math.PID;
 import com.team3390.robot.Constants;
 import com.team3390.robot.Constants.LOWPOWERMODE_INCREASE_TYPE;
 import com.team3390.robot.utility.CompetitionShuffleboard;
 import com.team3390.robot.utility.LowPowerMode;
-import com.team3390.robot.utility.PID;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

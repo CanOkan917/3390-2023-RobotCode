@@ -27,12 +27,12 @@ public class Hand3rdLevel extends CommandBase {
     manuplatorSubsystem.body(0);
     manuplatorSubsystem.elbow(0);
     manuplatorSubsystem.bodyGyro.reset();
-    manuplatorSubsystem.gyroOffset = 95;
+    manuplatorSubsystem.gyroOffset = 90;
   }
 
   @Override
   public boolean isFinished() {
-    return manuplatorSubsystem.getAngle() >= 95;
+    return manuplatorSubsystem.getAngle() >= 90;
   }
 
 }

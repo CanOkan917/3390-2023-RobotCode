@@ -20,13 +20,13 @@ public final class Constants {
   public static final boolean DRIVE_LEFT_INVERTED = true;
   public static final boolean DRIVE_RIGHT_INVERTED = false;
   public static final int     DRIVE_NAVX_ROLL_DEADBAND = 2;
-  public static final double  DRIVE_BALANCE_PID_KP = 10;
-  public static final double  DRIVE_BALANCE_PID_KI = 5;
-  public static final double  DRIVE_BALANCE_PID_KD = 5;
+  public static final double  DRIVE_BALANCE_PID_KP = 0.21;
+  public static final double  DRIVE_BALANCE_PID_KI = 0.05;
+  public static final double  DRIVE_BALANCE_PID_KD = 0.01;
   public static final double  DRIVE_BALANCE_PID_TOLERANCE = 3;
-  public static final double  DRIVE_BALANCE_PID_MAXOUT = 0.65;
+  public static final double  DRIVE_BALANCE_PID_MAXOUT = 0.5;
   public static final double  DRIVE_BALANCE_PID_MINOUT = DRIVE_BALANCE_PID_MAXOUT * -1;
-  public static final int     DRIVE_DETECT_ROLL = 5;
+  public static final int     DRIVE_DETECT_ROLL = 10;
 
   public static final int     ELEVATOR_BODY_ID = 3;
   public static final boolean ELEVATOR_BODY_INVERTED = true;

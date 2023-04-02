@@ -10,6 +10,7 @@ import com.team3390.robot.Constants.LIMELIGHT_LIGHT_MODE;
 import com.team3390.robot.commands.autonomous.Cone;
 import com.team3390.robot.commands.autonomous.Cube;
 import com.team3390.robot.commands.autonomous.OnlyRamp;
+import com.team3390.robot.commands.autonomous.Taxi;
 import com.team3390.robot.commands.drive.BalanceRobotCommand;
 import com.team3390.robot.commands.drive.TankDriveCommand;
 import com.team3390.robot.commands.manuplators.ExtractCone;
@@ -71,18 +72,12 @@ public class RobotContainer {
     limelightSubsystem.setLedMode(LIMELIGHT_LIGHT_MODE.PIPELINE_VALUE);
     limelightSubsystem.setPipeline(1);
   });
-  private final Command setLimelightForCamera = new InstantCommand(() -> {
-    limelightSubsystem.setPipeline(2);
-  });
+  private final Command setLimelightForCamera = new InstantCommand(() -> limelightSubsystem.setPipeline(2));
 
-  private final Command compOff = new InstantCommand(() -> {
-    comp.disable();
-  });
-  private final Command compOn = new InstantCommand(() -> {
-    comp.enableDigital();
-  });
+  private final Command compOff = new InstantCommand(() -> comp.disable());
+  private final Command compOn = new InstantCommand(() -> comp.enableDigital());
 
-  private final SendableChooser<Integer> gamePieceChooser = new SendableChooser<>();
+  private final SendableChooser<Integer> autoModeChooser = new SendableChooser<>();
   private final SendableChooser<Boolean> balanceChooser = new SendableChooser<>();
   private Command sellectedAuto;
   
@@ -135,14 +130,15 @@ public class RobotContainer {
       )
     );
 
-    gamePieceChooser.setDefaultOption("Cone", 1);
-    gamePieceChooser.addOption("Cube", 2);
-    gamePieceChooser.addOption("Only Ramp", 3);
+    autoModeChooser.addOption("Cone", 1);
+    autoModeChooser.addOption("Cube", 2);
+    autoModeChooser.addOption("Taxi", 3);
+    autoModeChooser.setDefaultOption("Ramp", 4);
 
     balanceChooser.addOption("Yes (Balance)", true);
     balanceChooser.setDefaultOption("No", false);
 
-    SmartDashboard.putData("Auto Mode", gamePieceChooser);
+    SmartDashboard.putData("Auto Mode", autoModeChooser);
     SmartDashboard.putData("Balance", balanceChooser);
   }
 
@@ -151,7 +147,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    int sellected = gamePieceChooser.getSelected();
+    int sellected = autoModeChooser.getSelected();
     limelightSubsystem.setPipeline(2);
 
     switch (sellected) {
@@ -162,13 +158,18 @@ public class RobotContainer {
       case 2:
         sellectedAuto = new Cube(driveSubsystem, manuplatorSubsystem, balanceChooser.getSelected());
         break;
-    
+
+      case 3:
+        sellectedAuto = new Taxi(driveSubsystem);
+        break;
+
       default:
         sellectedAuto = new OnlyRamp(driveSubsystem);
-        break;
     }      
 
-    manuplatorSubsystem.bodyGyro.reset();
+    manuplatorSubsystem.resetSensors();
+    driveSubsystem.resetSensors();
+
     return sellectedAuto;
   }
 }

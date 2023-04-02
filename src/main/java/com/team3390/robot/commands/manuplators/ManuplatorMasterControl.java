@@ -30,6 +30,8 @@ public class ManuplatorMasterControl extends CommandBase {
     // else
     //   manuplatorSubsystem.elbow(elbow.get());
     manuplatorSubsystem.elbow(elbow.get());
+
+    manuplatorSubsystem.hand_periodic();
   }
 
   @Override
