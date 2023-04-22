@@ -18,11 +18,13 @@ public class BalanceRobotCommand extends CommandBase {
 
   @Override
   public void execute() {
-    driveSubsystem.driveStraight(0.65, 0);
+    driveSubsystem.driveStraight(0.5, 0);
   }
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    driveSubsystem.stopMotors();
+  }
 
   @Override
   public boolean isFinished() {

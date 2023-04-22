@@ -20,15 +20,13 @@ public class HandFloorLevel extends CommandBase {
   @Override
   public void execute() {
     manuplatorSubsystem.body(1);
-    manuplatorSubsystem.elbow(-0.1);
+    manuplatorSubsystem.elbow(-0.15);
   }
 
   @Override
   public void end(boolean interrupted) {
     manuplatorSubsystem.body(0);
     manuplatorSubsystem.elbow(0);
-    manuplatorSubsystem.bodyGyro.reset();
-    manuplatorSubsystem.gyroOffset = 20;
   }
 
   @Override

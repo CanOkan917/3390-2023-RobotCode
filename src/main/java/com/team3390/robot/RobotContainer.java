@@ -18,8 +18,8 @@ import com.team3390.robot.commands.manuplators.ExtractCube;
 import com.team3390.robot.commands.manuplators.IntakeCone;
 import com.team3390.robot.commands.manuplators.IntakeCube;
 import com.team3390.robot.commands.manuplators.ManuplatorMasterControl;
-import com.team3390.robot.commands.manuplators.auto.Hand3rdLevel;
-import com.team3390.robot.commands.manuplators.auto.HandFloorLevel;
+import com.team3390.robot.commands.manuplators.auto.Hand3rdLevel2;
+import com.team3390.robot.commands.manuplators.auto.HandFloorLevel2;
 import com.team3390.robot.commands.utility.ResetSensorsCommand;
 import com.team3390.robot.subsystems.DriveSubsystem;
 import com.team3390.robot.subsystems.LimelightSubsystem;
@@ -61,8 +61,8 @@ public class RobotContainer {
   private final Command intakeCone = new IntakeCone(manuplatorSubsystem);
   private final Command extractCube = new ExtractCube(manuplatorSubsystem);
   private final Command extractCone = new ExtractCone(manuplatorSubsystem);
-  private final Command hand3rdLevel = new Hand3rdLevel(manuplatorSubsystem);
-  private final Command handFloorLevel = new HandFloorLevel(manuplatorSubsystem);
+  private final Command hand3rdLevel = new Hand3rdLevel2(manuplatorSubsystem);
+  private final Command handFloorLevel = new HandFloorLevel2(manuplatorSubsystem);
 
   private final Command setLimelightForRetroreflectiveTape = new InstantCommand(() -> {
     limelightSubsystem.setLedMode(LIMELIGHT_LIGHT_MODE.ON);
@@ -79,6 +79,7 @@ public class RobotContainer {
 
   private final SendableChooser<Integer> autoModeChooser = new SendableChooser<>();
   private final SendableChooser<Boolean> balanceChooser = new SendableChooser<>();
+  private final SendableChooser<Boolean> taxiChooser = new SendableChooser<>();
   private Command sellectedAuto;
   
   public RobotContainer() {
@@ -104,6 +105,9 @@ public class RobotContainer {
 
     new Trigger(() -> gamepad.getRawButton(4)).onTrue(hand3rdLevel);
     new Trigger(() -> gamepad.getRawButton(2)).onTrue(handFloorLevel);
+    new Trigger(() -> gamepad.getRawButton(3)).whileTrue(manuplatorSubsystem.arm_stable_command());
+    new Trigger(() -> gamepad.getRawButton(12)).whileTrue(manuplatorSubsystem.arm_stable_command());
+    new Trigger(() -> gamepad.getRawButton(11)).onTrue(manuplatorSubsystem.resetGyro());
 
     new Trigger(() -> gamepad.getRawButton(5)).whileTrue(intakeCube);
     new Trigger(() -> gamepad.getRawButton(6)).whileTrue(extractCube);
@@ -113,7 +117,7 @@ public class RobotContainer {
     driveSubsystem.calibrateSensors();
     driveSubsystem.resetSensors();
 
-    limelightSubsystem.setPipeline(2);
+    limelightSubsystem.setPipeline(0);
 
     driveSubsystem.setDefaultCommand(
       new TankDriveCommand(
@@ -138,8 +142,12 @@ public class RobotContainer {
     balanceChooser.addOption("Yes (Balance)", true);
     balanceChooser.setDefaultOption("No", false);
 
+    taxiChooser.setDefaultOption("Yes (Taxi)", true);
+    taxiChooser.addOption("No", false);
+
     SmartDashboard.putData("Auto Mode", autoModeChooser);
     SmartDashboard.putData("Balance", balanceChooser);
+    SmartDashboard.putData("Taxi", taxiChooser);
   }
 
   public void updateVars() {
@@ -148,15 +156,15 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     int sellected = autoModeChooser.getSelected();
-    limelightSubsystem.setPipeline(2);
+    limelightSubsystem.setPipeline(0);
 
     switch (sellected) {
       case 1:
-        sellectedAuto = new Cone(driveSubsystem, manuplatorSubsystem, balanceChooser.getSelected());
+        sellectedAuto = new Cone(driveSubsystem, manuplatorSubsystem, balanceChooser.getSelected(), taxiChooser.getSelected());
         break;
 
       case 2:
-        sellectedAuto = new Cube(driveSubsystem, manuplatorSubsystem, balanceChooser.getSelected());
+        sellectedAuto = new Cube(driveSubsystem, manuplatorSubsystem, balanceChooser.getSelected(), taxiChooser.getSelected());
         break;
 
       case 3:

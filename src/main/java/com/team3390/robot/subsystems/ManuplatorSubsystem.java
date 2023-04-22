@@ -18,7 +18,7 @@ public class ManuplatorSubsystem extends SubsystemBase {
   private static ManuplatorSubsystem instance;
   private final CompetitionShuffleboard shuffleboard = CompetitionShuffleboard.getInstance();
 
-  private boolean isBreakMode = false;
+  private boolean isBreakMode = true;
 
   private final LazyTalonSRX bodyMaster, elbowMaster, handMaster;
 
@@ -27,7 +27,6 @@ public class ManuplatorSubsystem extends SubsystemBase {
   private final Configuration handConfiguration = new Configuration();
 
   public final AnalogGyro bodyGyro;
-  public double gyroOffset = 0;
 
   private final Solenoid intakeSolenoid;
 
@@ -99,7 +98,7 @@ public class ManuplatorSubsystem extends SubsystemBase {
   }
 
   public double getAngle() {
-    return bodyGyro.getAngle() + gyroOffset;
+    return bodyGyro.getAngle();
   }
 
   public void body(double speed) {
@@ -114,7 +113,6 @@ public class ManuplatorSubsystem extends SubsystemBase {
     intakeSolenoid.set(true);
   }
   public void cone_execute_intake() {
-    handMaster.set(1);
   }
   public void cone_execute_extract() {
     intakeSolenoid.set(false);
@@ -137,7 +135,15 @@ public class ManuplatorSubsystem extends SubsystemBase {
   }
 
   public void hand_periodic() {
-    handMaster.set(0.25);
+    
+  }
+
+  public void arm_stable() {
+    bodyMaster.set(-0.1);
+  }
+
+  public CommandBase arm_stable_command() {
+    return run(() -> arm_stable());
   }
 
 }

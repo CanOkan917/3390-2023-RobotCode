@@ -18,7 +18,7 @@ public class Hand3rdLevel extends CommandBase {
 
   @Override
   public void execute() {
-    manuplatorSubsystem.body(-1);
+    manuplatorSubsystem.body(-0.85);
     manuplatorSubsystem.elbow(0.1);
   }
 
@@ -26,8 +26,6 @@ public class Hand3rdLevel extends CommandBase {
   public void end(boolean interrupted) {
     manuplatorSubsystem.body(0);
     manuplatorSubsystem.elbow(0);
-    manuplatorSubsystem.bodyGyro.reset();
-    manuplatorSubsystem.gyroOffset = 90;
   }
 
   @Override
